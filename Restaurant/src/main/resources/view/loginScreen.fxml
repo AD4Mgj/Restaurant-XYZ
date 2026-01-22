@@ -19,7 +19,7 @@
 
             <Button fx:id="loginButton"
                     text="Zaloguj się"
-                    onAction="#onLoginClick"
+                    onMouseClicked="#onLoginClick"
                     maxWidth="400"/>
             <Button fx:id="registerButton"
                     text="Zarejestruj się"

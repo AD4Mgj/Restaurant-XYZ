@@ -1,11 +1,15 @@
 package kul.example.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
+import kul.example.utils.SceneUtils;
 
 public class LoginController {
 
-
-    public void onLoginClick(ActionEvent actionEvent) {
+    @FXML
+    public void onLoginClick(MouseEvent event) {
+        SceneUtils.changeScene(event, "/view/login.fxml");
     }
 
     public void onRegisterClick(ActionEvent actionEvent) {
