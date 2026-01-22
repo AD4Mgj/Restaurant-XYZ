@@ -12,6 +12,8 @@ public class LoginController {
         SceneUtils.changeScene(event, "/view/login.fxml");
     }
 
+    @FXML
     public void onRegisterClick(ActionEvent actionEvent) {
+        SceneUtils.changeScene("/view/register.fxml");
     }
 }
