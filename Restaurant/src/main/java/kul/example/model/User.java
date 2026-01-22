@@ -8,14 +8,16 @@ public class User {
     private String firstName;
     private String lastName;
     private double wallet;
+    private String role;
 
-    public User(int id, String email, String password, String firstName, String lastName, double wallet) {
+    public User(int id, String email, String password, String firstName, String lastName, double wallet, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.wallet = wallet;
+        this.role = role;
     }
 
     public int getId() {
@@ -66,7 +68,15 @@ public class User {
         this.wallet = wallet;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String toCSV() {
-        return id + ";" + email + ";" + password + ";" + firstName + ";" + lastName + ";" + wallet;
+        return id + ";" + email + ";" + password + ";" + firstName + ";" + lastName + ";" + wallet + ";" + role;
     }
 }

@@ -48,8 +48,16 @@ public class PasswordController {
             return;
         }
 
-        messageLabel.setText("Zalogowano pomyślnie!");
+        // ADMIN
+        if (currentUser.getRole().equalsIgnoreCase("ADMIN")) {
+            SceneUtils.changeScene("/view/adminDashboard.fxml");
+            return;
+        }
+
+        // USER
+        SceneUtils.changeScene("/view/userDashboard.fxml");
     }
+
 
     @FXML
     private void onBackClick() {

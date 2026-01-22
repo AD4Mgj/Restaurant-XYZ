@@ -57,7 +57,8 @@ public class RegisterController {
                 password,
                 firstName,
                 lastName,
-                0.0
+                0.0,
+                "USER"
         );
 
         UserDatabase.saveUser(user);

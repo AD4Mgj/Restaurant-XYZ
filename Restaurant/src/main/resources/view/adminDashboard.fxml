@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.UserDashboardController">
+
+    <center>
+        <Label text="Witaj, Adminie!" style="-fx-font-size: 24px;"/>
+    </center>
+
+</BorderPane>

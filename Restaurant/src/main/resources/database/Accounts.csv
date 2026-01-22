@@ -1,2 +1,3 @@
-id;email;password;firstName;lastName;wallet
-1;adam;zzzz;adam;adam;0.0
+id;email;password;firstName;lastName;wallet;role
+1;admin@example.com;admin123;Admin;Root;0;ADMIN
+2;adam;adam;adam;adam;0;USER

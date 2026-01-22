@@ -29,7 +29,8 @@ public class LoginDatabase {
                             parts[2],
                             parts[3],
                             parts[4],
-                            Double.parseDouble(parts[5])
+                            Double.parseDouble(parts[5]),
+                            parts[6] // ROLE
                     );
                 }
             }
