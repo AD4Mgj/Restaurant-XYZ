@@ -28,3 +28,16 @@ tasks.test {
 application {
     mainClass.set("kul.example.HelloApplication")
 }
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+
+sourceSets {
+    main {
+        resources {
+            srcDirs("src/main/resources")
+        }
+    }
+}

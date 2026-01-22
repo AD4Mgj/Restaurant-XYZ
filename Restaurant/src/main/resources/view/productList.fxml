@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.ProductListController"
+            prefWidth="700" prefHeight="500">
+
+    <top>
+        <Label text="Lista produktów"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;"
+               BorderPane.alignment="CENTER"/>
+<!--               padding="20"-->
+<!--        />-->
+    </top>
+
+    <center>
+        <TableView fx:id="productTable" prefWidth="600" prefHeight="350">
+
+            <columns>
+
+                <TableColumn fx:id="idColumn"
+                             text="ID"
+                             prefWidth="50"/>
+
+                <TableColumn fx:id="nameColumn"
+                             text="Nazwa"
+                             prefWidth="200"/>
+
+                <TableColumn fx:id="priceColumn"
+                             text="Cena"
+                             prefWidth="100"/>
+
+                <TableColumn fx:id="categoryColumn"
+                             text="Kategoria"
+                             prefWidth="150"/>
+
+                <TableColumn fx:id="imageColumn"
+                             text="Zdjęcie"
+                             prefWidth="150"/>
+
+            </columns>
+
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button text="Odśwież" prefWidth="120" onAction="#onRefresh"/>
+            <Button text="Usuń produkt" prefWidth="120" onAction="#onDeleteProduct"/>
+            <Button text="Powrót" prefWidth="120" onAction="#onBack"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

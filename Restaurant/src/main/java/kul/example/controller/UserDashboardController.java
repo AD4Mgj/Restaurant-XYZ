@@ -1,15 +1,17 @@
 package kul.example.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import kul.example.utils.SceneUtils;
 
 public class UserDashboardController {
 
     @FXML
-    private Label someLabel;
+    private void onBrowseMenu() {
+        SceneUtils.changeScene("/view/userProducts.fxml");
+    }
 
     @FXML
-    private void initialize() {
-        System.out.println("UserDashboardController initialized");
+    private void onLogout() {
+        SceneUtils.changeScene("/view/login.fxml");
     }
 }

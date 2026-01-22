@@ -39,7 +39,7 @@ public class PasswordController {
     }
 
     @FXML
-    private void dashboard() {
+    private void onLoginClick() {
         String pass = passwordField.getText();
 
         if (!currentUser.getPassword().equals(pass)) {
@@ -48,16 +48,13 @@ public class PasswordController {
             return;
         }
 
-        // ADMIN
         if (currentUser.getRole().equalsIgnoreCase("ADMIN")) {
             SceneUtils.changeScene("/view/adminDashboard.fxml");
             return;
         }
 
-        // USER
         SceneUtils.changeScene("/view/userDashboard.fxml");
     }
-
 
     @FXML
     private void onBackClick() {

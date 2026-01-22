@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.UserProductsController"
+            prefWidth="800" prefHeight="600">
+
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Menu"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+            <Label text="Kategoria:"/>
+
+            <ComboBox fx:id="categoryFilter"
+                      prefWidth="200"
+                      onAction="#onFilterChanged"/>
+
+            <Button text="Wyczyść filtr"
+                    onAction="#onClearFilter"/>
+
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <FlowPane fx:id="productContainer"
+                      hgap="20" vgap="20"
+                      prefWrapLength="700">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </FlowPane>
+
+        </ScrollPane>
+    </center>
+
+</BorderPane>

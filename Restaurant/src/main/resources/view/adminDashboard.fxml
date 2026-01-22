@@ -2,13 +2,37 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="kul.example.controller.UserDashboardController">
+            fx:controller="kul.example.controller.AdminDashboardController"
+            prefWidth="600" prefHeight="400">
+
+    <top>
+        <Label text="Panel administratora"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;"
+               BorderPane.alignment="CENTER"/>
+<!--               padding="20"-->
+<!--        />-->
+    </top>
 
     <center>
-        <Label text="Witaj, Adminie!" style="-fx-font-size: 24px;"/>
+        <VBox spacing="20" alignment="CENTER">
+
+            <Button text="Dodaj produkt"
+                    prefWidth="200"
+                    onAction="#onAddProduct"/>
+
+            <Button text="Zarządzaj kategoriami"
+                    prefWidth="200"
+                    onAction="#onManageCategories"/>
+
+            <Button text="Lista produktów"
+                    prefWidth="200"
+                    onAction="#onProductList"/>
+
+        </VBox>
     </center>
 
 </BorderPane>

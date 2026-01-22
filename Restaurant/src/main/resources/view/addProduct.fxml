@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.AddProductController"
+            prefWidth="500" prefHeight="400">
+
+    <center>
+        <VBox spacing="12" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Dodaj produkt" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="nameField"
+                       promptText="Nazwa produktu"
+                       prefWidth="250"/>
+
+            <TextField fx:id="priceField"
+                       promptText="Cena"
+                       prefWidth="250"/>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Kategoria:"/>
+                <ComboBox fx:id="categoryCombo" prefWidth="180"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Zdjęcie:"/>
+                <Button text="Wybierz plik" onAction="#onChooseImage"/>
+            </HBox>
+
+            <Label fx:id="imagePathLabel" text="Brak wybranego zdjęcia" textFill="gray"/>
+
+            <HBox spacing="20" alignment="CENTER">
+                <Button text="Dodaj danie" onAction="#onAddProduct" prefWidth="120"/>
+                <Button text="Anuluj" onAction="#onCancel" prefWidth="120"/>
+            </HBox>
+
+            <Label fx:id="messageLabel" textFill="green"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>
