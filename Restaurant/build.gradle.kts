@@ -11,12 +11,14 @@ repositories {
     mavenCentral()
 }
 
+javafx {
+    version = "23"
+    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web")
+}
+
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    implementation("org.openjfx:javafx-controls:17.0.6")
-    implementation("org.openjfx:javafx-fxml:17.0.6")
-    implementation("org.openjfx:javafx-web:17.0.6")
 }
 
 tasks.test {
