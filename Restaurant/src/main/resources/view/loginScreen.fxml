@@ -11,4 +11,20 @@
             fx:controller="kul.example.controller.LoginController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <VBox alignment="CENTER" spacing="10" styleClass=""
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
+
+            <Button fx:id="loginButton"
+                    text="Zaloguj się"
+                    onAction="#onLoginClick"
+                    maxWidth="400"/>
+            <Button fx:id="registerButton"
+                    text="Zarejestruj się"
+                    onAction="#onRegisterClick"
+                    maxWidth="400"/>
+    </VBox>
+
 </AnchorPane>
