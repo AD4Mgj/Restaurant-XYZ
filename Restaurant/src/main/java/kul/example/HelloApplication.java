@@ -11,7 +11,6 @@ public class HelloApplication extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Restaurant XYZ");
 
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
         primaryStage.setResizable(false);
 
         SceneUtils.setInitialScene(primaryStage, "/view/loginScreen.fxml");
