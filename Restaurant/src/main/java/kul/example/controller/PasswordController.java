@@ -1,34 +1,69 @@
 package kul.example.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import kul.example.database.LoginDatabase;
+import kul.example.model.User;
 import kul.example.utils.SceneUtils;
 
 public class PasswordController {
 
     @FXML
     private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private Hyperlink resetLink;
 
-    public void onNextClick(MouseEvent event) {
-//        String email = emailField.getText();
-        // TODO: walidacja
-//        System.out.println("Podano e-mail: " + email);
-        SceneUtils.changeScene(event,"/view/loginWithpassword.fxml");
+    private static User currentUser;
+
+    @FXML
+    private void onNextClick() {
+        String email = emailField.getText();
+
+        User user = LoginDatabase.findUserByEmail(email);
+
+        if (user == null) {
+            messageLabel.setText("Nie znaleziono konta o takim adresie e-mail");
+            return;
+        }
+
+        currentUser = user;
+
+        SceneUtils.changeScene("/view/loginWithPassword.fxml");
     }
 
+    @FXML
+    private void dashboard() {
+        String pass = passwordField.getText();
 
-    public void onBackClick(ActionEvent actionEvent) {
+        if (!currentUser.getPassword().equals(pass)) {
+            messageLabel.setText("Niepoprawne hasło");
+            resetLink.setVisible(true);
+            return;
+        }
+
+        messageLabel.setText("Zalogowano pomyślnie!");
+    }
+
+    @FXML
+    private void onBackClick() {
         SceneUtils.changeScene("/view/login.fxml");
     }
 
-    public void onForgotPasswordClick(MouseEvent mouseEvent) {
-        // TODO: ekran resetu hasła
-        System.out.println("Kliknięto 'Nie pamiętasz hasła?'");
+    @FXML
+    private void onForgotPasswordClick() {
+        messageLabel.setText("Funkcja niedostępna");
     }
 
-    public void dashboard(MouseEvent event) {
-        SceneUtils.changeScene(event,"/view/dashboard.fxml");
+    @FXML
+    private void onResetPasswordClick() {
+        ResetPasswordController.setUser(currentUser);
+        SceneUtils.changeScene("/view/resetPassword.fxml");
     }
 }

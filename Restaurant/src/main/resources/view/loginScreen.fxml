@@ -17,14 +17,14 @@
           AnchorPane.leftAnchor="0"
           AnchorPane.rightAnchor="0">
 
-            <Button fx:id="loginButton"
-                    text="Zaloguj się"
-                    onMouseClicked="#onLoginClick"
-                    maxWidth="400"/>
-            <Button fx:id="registerButton"
-                    text="Zarejestruj się"
-                    onAction="#onRegisterClick"
-                    maxWidth="400"/>
+        <Button fx:id="loginButton"
+                text="Zaloguj się"
+                onMouseClicked="#onLoginClick"
+                maxWidth="400"/>
+        <Button fx:id="registerButton"
+                text="Zarejestruj się"
+                onAction="#onRegisterClick"
+                maxWidth="400"/>
     </VBox>
 
 </AnchorPane>

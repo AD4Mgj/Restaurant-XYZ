@@ -1,47 +1,68 @@
 package kul.example.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import kul.example.database.UserDatabase;
 import kul.example.model.User;
+import kul.example.utils.SceneUtils;
 
 public class RegisterController {
 
     @FXML
     private TextField emailField;
+    @FXML
+    private TextField passwordField;
+    @FXML
+    private TextField firstNameField;
+    @FXML
+    private TextField lastNameField;
+
+    private static String email;
+    private static String password;
+    private static String firstName;
+    private static String lastName;
 
     @FXML
-    private PasswordField passwordField;
+    private void goToCode() {
+        email = emailField.getText();
+        SceneUtils.changeScene("/view/registerCode.fxml");
+    }
 
     @FXML
-    private PasswordField confirmPasswordField;
+    private void goToPassword() {
+        SceneUtils.changeScene("/view/registerPassword.fxml");
+    }
 
     @FXML
-    private Label messageLabel;
+    private void goToName() {
+        password = passwordField.getText();
+        SceneUtils.changeScene("/view/registerName.fxml");
+    }
 
     @FXML
-    private void handleRegister() {
-        String email = emailField.getText();
-        String pass = passwordField.getText();
-        String confirm = confirmPasswordField.getText();
+    private void goToDone() {
+        firstName = firstNameField.getText();
+        lastName = lastNameField.getText();
+        SceneUtils.changeScene("/view/registerDone.fxml");
+    }
 
-        if (email.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
-            messageLabel.setText("Wszystkie pola są wymagane");
-            return;
-        }
+    @FXML
+    private void finishRegistration() {
 
-        if (!pass.equals(confirm)) {
-            messageLabel.setText("Hasła nie są takie same");
-            return;
-        }
+        int id = UserDatabase.getNextId();
 
-        // Tworzymy użytkownika
-        User user = new User(0, email, pass, 0.0);
+        User user = new User(
+                id,
+                email,
+                password,
+                firstName,
+                lastName,
+                0.0
+        );
 
-        // Tu możesz dodać zapis do bazy, pliku, listy itd.
-        System.out.println("Zarejestrowano użytkownika: " + user);
+        UserDatabase.saveUser(user);
 
-        messageLabel.setText("Zarejestrowano pomyślnie");
+        System.out.println("Zapisano użytkownika:");
+        System.out.println(user.toCSV());
     }
 }

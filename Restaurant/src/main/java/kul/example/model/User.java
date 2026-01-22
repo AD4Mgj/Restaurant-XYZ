@@ -1,17 +1,20 @@
 package kul.example.model;
 
-import java.util.Objects;
-
 public class User {
+
     private int id;
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
     private double wallet;
 
-    public User(int id, String email, String password, double wallet) {
+    public User(int id, String email, String password, String firstName, String lastName, double wallet) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.wallet = wallet;
     }
 
@@ -19,53 +22,51 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public double getWallet() {
         return wallet;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public void setWallet(double wallet) {
         this.wallet = wallet;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", wallet=" + wallet +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && Double.compare(wallet, user.wallet) == 0 && Objects.equals(email, user.email) && Objects.equals(password, user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password, wallet);
+    public String toCSV() {
+        return id + ";" + email + ";" + password + ";" + firstName + ";" + lastName + ";" + wallet;
     }
 }
