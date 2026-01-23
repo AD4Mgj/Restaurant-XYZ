@@ -58,5 +58,30 @@ public class UserDatabase {
         }
     }
 
+    public static void updateUserWallet(User user) {
+        try {
+            Path path = Paths.get(FILE_PATH);
+            List<String> lines = Files.readAllLines(path);
+
+            for (int i = 1; i < lines.size(); i++) {
+                String line = lines.get(i).trim();
+                if (line.isEmpty()) continue;
+
+                String[] parts = line.split(";");
+                if (parts.length < 7) continue;
+
+                if (parts[0].equals(String.valueOf(user.getId()))) {
+                    parts[5] = String.valueOf(user.getWallet());
+                    lines.set(i, String.join(";", parts));
+                    break;
+                }
+            }
+
+            Files.write(path, lines);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

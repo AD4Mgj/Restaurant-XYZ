@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.WalletController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox spacing="10" alignment="CENTER"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
+
+        <Button text="←"
+                onAction="#onBackClick"/>
+
+        <Label text="Stan konta:"/>
+        <Label fx:id="balanceLabel"/>
+
+        <TextField fx:id="amountField"
+                   promptText="Kwota (np. 25.50)"/>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Dodaj środki"
+                    onAction="#onDepositClick"/>
+            <Button text="Odejmij środki"
+                    onAction="#onWithdrawClick"/>
+        </HBox>
+
+        <Label fx:id="errorLabel"
+               style="-fx-text-fill: red;"/>
+    </VBox>
+
+</AnchorPane>

@@ -24,6 +24,10 @@
                     prefWidth="200"
                     onAction="#onBrowseMenu"/>
 
+            <Button text="Moj Portfel"
+                    prefWidth="200"
+                    onAction="#onWallet"/>
+
             <Button text="Wyloguj"
                     prefWidth="200"
                     onAction="#onLogout"/>

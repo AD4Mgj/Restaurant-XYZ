@@ -1,4 +1,4 @@
 id;email;password;firstName;lastName;wallet;role
-1;admin;admin123;Admin;Root;0;ADMIN
+1;admin;admin123;Admin;Root;40.0;ADMIN
 2;adam;adam;adam;adam;0;USER
-3;test;test123;Test;Testowany;0.0;USER
+3;test;test123;Test;Testowany;30.0;USER

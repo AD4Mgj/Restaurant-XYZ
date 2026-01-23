@@ -1,5 +1,6 @@
 package kul.example.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import kul.example.utils.SceneUtils;
 
@@ -12,6 +13,10 @@ public class UserDashboardController {
 
     @FXML
     private void onLogout() {
-        SceneUtils.changeScene("/view/login.fxml");
+        SceneUtils.changeScene("/view/welcomeScreen.fxml");
+    }
+
+    public void onWallet() {
+        SceneUtils.changeScene("/view/wallet.fxml");
     }
 }
