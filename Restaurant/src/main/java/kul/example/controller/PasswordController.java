@@ -7,6 +7,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import kul.example.database.LoginDatabase;
 import kul.example.model.User;
+import kul.example.service.UserSession;
 import kul.example.utils.SceneUtils;
 
 public class PasswordController {
@@ -20,35 +21,25 @@ public class PasswordController {
     @FXML
     private Hyperlink resetLink;
 
-    private static User currentUser;
-
-    @FXML
-    private void onNextClick() {
-        String email = emailField.getText();
-
-        User user = LoginDatabase.findUserByEmail(email);
-
-        if (user == null) {
-            messageLabel.setText("Nie znaleziono konta o takim adresie e-mail");
-            return;
-        }
-
-        currentUser = user;
-
-        SceneUtils.changeScene("/view/loginWithPassword.fxml");
-    }
+    User user = UserSession.get();
 
     @FXML
     private void onLoginClick() {
         String pass = passwordField.getText();
+        User user = UserSession.get();
 
-        if (!currentUser.getPassword().equals(pass)) {
+        if (user == null) {
+            messageLabel.setText("Błąd: użytkownik nie został przekazany.");
+            return;
+        }
+
+        if (!user.getPassword().equals(pass)) {
             messageLabel.setText("Niepoprawne hasło");
             resetLink.setVisible(true);
             return;
         }
 
-        if (currentUser.getRole().equalsIgnoreCase("ADMIN")) {
+        if (user.getRole().equalsIgnoreCase("ADMIN")) {
             SceneUtils.changeScene("/view/adminDashboard.fxml");
             return;
         }
@@ -68,7 +59,7 @@ public class PasswordController {
 
     @FXML
     private void onResetPasswordClick() {
-        ResetPasswordController.setUser(currentUser);
+        ResetPasswordController.setUser(user);
         SceneUtils.changeScene("/view/resetPassword.fxml");
     }
 }

@@ -10,6 +10,9 @@ import kul.example.model.Product;
 import kul.example.utils.SceneUtils;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 public class AddProductController {
@@ -47,10 +50,43 @@ public class AddProductController {
 
         File file = chooser.showOpenDialog(null);
         if (file != null) {
-            selectedImagePath = "/images/" + file.getName();
-            imagePathLabel.setText(file.getName());
+            try {
+                String rawName = nameField.getText().trim();
+
+                if (rawName.isEmpty()) {
+                    messageLabel.setText("Najpierw wpisz nazwę produktu!");
+                    messageLabel.setStyle("-fx-text-fill: red;");
+                    return;
+                }
+
+                String normalized = rawName
+                        .trim()
+                        .replaceAll("\\s+", "_")
+                        .toLowerCase();
+
+                //zawsze .png
+                String finalFileName = normalized + ".png";
+
+                Path destDir = Path.of("src/main/resources/images/");
+                Files.createDirectories(destDir);
+
+                Path dest = destDir.resolve(finalFileName);
+
+                Files.copy(file.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
+
+                selectedImagePath = "/images/" + finalFileName;
+                imagePathLabel.setText(finalFileName);
+
+                messageLabel.setText("Wybrano i zapisano: " + finalFileName);
+                messageLabel.setStyle("-fx-text-fill: green;");
+
+            } catch (Exception e) {
+                imagePathLabel.setText("Błąd kopiowania!");
+                e.printStackTrace();
+            }
         }
     }
+
 
     @FXML
     private void onAddProduct() {

@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
 
         primaryStage.setResizable(false);
 
-        SceneUtils.setInitialScene(primaryStage, "/view/loginScreen.fxml");
+        SceneUtils.setInitialScene(primaryStage, "/view/welcomeScreen.fxml");
         primaryStage.show();
     }
 
