@@ -10,6 +10,7 @@ import kul.example.database.CategoryDatabase;
 import kul.example.database.ProductDatabase;
 import kul.example.model.Category;
 import kul.example.model.Product;
+import kul.example.utils.SceneUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +49,11 @@ public class UserProductsController {
             VBox box = createProductBox(p);
             productContainer.getChildren().add(box);
         }
+    }
+
+    @FXML
+    private void onBackClick() {
+        SceneUtils.changeScene("/view/userDashboard.fxml");
     }
 
     private VBox createProductBox(Product product) {
@@ -93,4 +99,5 @@ public class UserProductsController {
         categoryFilter.getSelectionModel().clearSelection();
         loadProducts(null);
     }
+
 }

@@ -1,5 +1,6 @@
 id;name;price;imagePath;categoryId
 1;Margherita;24.99;/images/pizza_margherita.png;1
-2;Cheeseburger;19.50;/images/burger_cheese.png;2
-3;Carbonara;27.00;/images/pasta_carbonara.png;3
-4;Tiramisu;15.00;/images/tiramisu.png;4
+2;Cheeseburger;19.5;/images/burger_cheese.png;2
+3;Carbonara;27.0;/images/pasta_carbonara.png;3
+4;Tiramisu;15.0;/images/tiramisu.png;4
+5;Test;40.0;/images/test.png;3
