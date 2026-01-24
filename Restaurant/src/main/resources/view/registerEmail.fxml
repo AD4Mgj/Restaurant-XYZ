@@ -3,21 +3,47 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.RegisterController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefWidth="1100.0" prefHeight="700.0"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
 
-    <children>
-        <VBox alignment="CENTER" spacing="15"
-              AnchorPane.topAnchor="0"
-              AnchorPane.bottomAnchor="0"
-              AnchorPane.leftAnchor="0"
-              AnchorPane.rightAnchor="0">
+    <top>
+        <HBox styleClass="topbar">
+            <Label text="RESTAURACJA" styleClass="topbar-title"/>
+        </HBox>
+    </top>
 
-            <Label text="Jaki jest Twój adres e-mail?" style="-fx-font-size: 18px;"/>
-            <TextField fx:id="emailField" promptText="Email"/>
-            <Button text="Dalej" onAction="#goToCode"/>
-        </VBox>
-    </children>
-</AnchorPane>
+    <center>
+        <StackPane>
+            <VBox styleClass="form-wrap" maxWidth="380">
+
+                <HBox alignment="CENTER_LEFT" maxWidth="380">
+                    <Button text="←" onAction="#onBackToWelcome" styleClass="back-btn"/>
+                </HBox>
+
+                <Label text="Jaki jest Twój adres e-mail?" styleClass="form-title" wrapText="true"/>
+
+                <TextField fx:id="emailField"
+                           promptText="Email"
+                           maxWidth="340"
+                           styleClass="field"/>
+
+                <Label fx:id="emailErrorLabel"
+                       styleClass="error-text"
+                       wrapText="true"
+                       maxWidth="340"/>
+
+                <!-- TERAZ PRZECHODZIMY OD RAZU DO HASŁA -->
+                <Button text="Dalej"
+                        maxWidth="340"
+                        styleClass="btn-primary"
+                        onAction="#goToPassword"/>
+
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

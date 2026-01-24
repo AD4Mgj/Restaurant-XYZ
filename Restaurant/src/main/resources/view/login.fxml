@@ -6,28 +6,40 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.LoginController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefWidth="1100.0" prefHeight="700.0"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
+
+    <top>
+        <HBox styleClass="topbar">
+            <Label text="RESTAURACJA" styleClass="topbar-title"/>
+        </HBox>
+    </top>
 
     <center>
-        <VBox spacing="10" alignment="CENTER">
+        <StackPane>
+            <VBox styleClass="form-wrap" maxWidth="380">
 
-            <Button text="←"
-                    onAction="#onBackClick"/>
+                <HBox alignment="CENTER_LEFT" maxWidth="380">
+                    <Button text="←" onAction="#onBackClick" styleClass="back-btn"/>
+                </HBox>
 
-            <Label text="Jaki jest twój adres e-mail?"
-                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label text="Jaki jest twój adres e-mail?" styleClass="form-title" wrapText="true"/>
 
-            <TextField fx:id="emailField"
-                       promptText="Wpisz adres e-mail"
-                       prefWidth="200"/>
+                <TextField fx:id="emailField"
+                           promptText="Wpisz adres e-mail"
+                           maxWidth="340"
+                           styleClass="field"/>
 
-            <Label fx:id="messageLabel" textFill="red"/>
+                <Label fx:id="messageLabel" styleClass="error-text" wrapText="true"/>
 
-            <Button text="Dalej"
-                    prefWidth="300"
-                    onAction="#onNextClick"/>
+                <Button text="Dalej"
+                        maxWidth="340"
+                        styleClass="btn-primary"
+                        onAction="#onNextClick"/>
 
-        </VBox>
+            </VBox>
+        </StackPane>
     </center>
 
 </BorderPane>

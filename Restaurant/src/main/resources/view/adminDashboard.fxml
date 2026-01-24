@@ -1,38 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.AdminDashboardController"
-            prefWidth="600" prefHeight="400">
+            stylesheets="@/styles/app.css">
 
+    <!-- TOP BAR -->
     <top>
-        <Label text="Panel administratora"
-               style="-fx-font-size: 22px; -fx-font-weight: bold;"
-               BorderPane.alignment="CENTER"/>
-<!--               padding="20"-->
-<!--        />-->
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <padding>
+                <Insets top="18" right="24" bottom="18" left="24"/>
+            </padding>
+
+            <Label text="RESTAURACJA" styleClass="topbar-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- (opcjonalnie) logout w prawym rogu -->
+            <Button text="Wyloguj" onAction="#onLogout" styleClass="topbar-logout"/>
+        </HBox>
     </top>
 
+    <!-- CAŁY EKRAN SCROLL -->
     <center>
-        <VBox spacing="20" alignment="CENTER">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="page-scroll">
+            <content>
+                <VBox spacing="18" styleClass="page" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="18" right="24" bottom="24" left="24"/>
+                    </padding>
 
-            <Button text="Dodaj produkt"
-                    prefWidth="200"
-                    onAction="#onAddProduct"/>
+                    <!-- BANNER -->
+                    <ImageView fx:id="bannerImage" fitWidth="980" preserveRatio="true" styleClass="banner"/>
 
-            <Button text="Zarządzaj kategoriami"
-                    prefWidth="200"
-                    onAction="#onManageCategories"/>
+                    <!-- SEARCH -->
+                    <StackPane styleClass="search-wrapper" maxWidth="520">
+                        <Label text="🔍"
+                               styleClass="search-icon"
+                               mouseTransparent="true"
+                               StackPane.alignment="CENTER_LEFT"/>
 
-            <Button text="Lista produktów"
-                    prefWidth="200"
-                    onAction="#onProductList"/>
+                        <TextField fx:id="searchField"
+                                   promptText="Wyszukaj danie po nazwie"
+                                   styleClass="search-field"
+                                   maxWidth="520"/>
+                    </StackPane>
 
-        </VBox>
+                    <!-- MAIN: CATEGORIES + PRODUCTS -->
+                    <HBox spacing="24" alignment="TOP_CENTER">
+                        <!-- LEFT -->
+                        <VBox spacing="12" prefWidth="220" maxWidth="220">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Wybierz kategorię" styleClass="section-title"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <!-- ołówek / fajka -->
+                                <Button fx:id="editCategoriesBtn"
+                                        text="✎"
+                                        onAction="#onToggleCategoryEdit"
+                                        styleClass="icon-btn"/>
+                            </HBox>
+
+                            <!-- TU KAFELKI KATEGORII -->
+                            <VBox fx:id="categoryContainer" spacing="10"/>
+                        </VBox>
+
+                        <!-- RIGHT -->
+                        <FlowPane fx:id="productContainer"
+                                  hgap="18" vgap="18"
+                                  prefWrapLength="760"/>
+                    </HBox>
+                </VBox>
+            </content>
+        </ScrollPane>
     </center>
 
 </BorderPane>

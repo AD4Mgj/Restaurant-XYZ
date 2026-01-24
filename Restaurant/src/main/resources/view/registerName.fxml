@@ -3,22 +3,52 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.RegisterController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefWidth="1100.0" prefHeight="700.0"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
 
-    <children>
-        <VBox alignment="CENTER" spacing="15"
-              AnchorPane.topAnchor="0"
-              AnchorPane.bottomAnchor="0"
-              AnchorPane.leftAnchor="0"
-              AnchorPane.rightAnchor="0">
+    <top>
+        <HBox styleClass="topbar">
+            <Label text="RESTAURACJA" styleClass="topbar-title"/>
+        </HBox>
+    </top>
 
-            <Label text="Podaj swoje imię i nazwisko"/>
-            <TextField fx:id="firstNameField" promptText="Imię"/>
-            <TextField fx:id="lastNameField" promptText="Nazwisko"/>
-            <Button text="Dalej" onAction="#goToDone"/>
-        </VBox>
-    </children>
-</AnchorPane>
+    <center>
+        <StackPane>
+            <VBox styleClass="form-wrap" maxWidth="380">
+
+                <HBox alignment="CENTER_LEFT" maxWidth="380">
+                    <Button text="←" onAction="#onBackToRegisterPassword" styleClass="back-btn"/>
+                </HBox>
+
+                <Label text="Wpisz swoje imię i nazwisko" styleClass="form-title" wrapText="true"/>
+
+                <TextField fx:id="firstNameField"
+                           promptText="Imię"
+                           maxWidth="340"
+                           styleClass="field"/>
+
+                <TextField fx:id="lastNameField"
+                           promptText="Nazwisko"
+                           maxWidth="340"
+                           styleClass="field"/>
+
+                <!-- BŁĄD -->
+                <Label fx:id="nameErrorLabel"
+                       styleClass="error-text"
+                       wrapText="true"
+                       maxWidth="340"/>
+
+                <Button text="Dalej"
+                        maxWidth="340"
+                        styleClass="btn-primary"
+                        onAction="#goToDone"/>
+
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

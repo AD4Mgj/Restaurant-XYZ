@@ -1,30 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.WelcomeController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefWidth="1100.0" prefHeight="700.0"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
 
-    <VBox alignment="CENTER" spacing="10" styleClass=""
-          AnchorPane.topAnchor="0"
-          AnchorPane.bottomAnchor="0"
-          AnchorPane.leftAnchor="0"
-          AnchorPane.rightAnchor="0">
+    <!-- GÓRNY PASEK -->
+    <top>
+        <HBox styleClass="topbar">
+            <Label text="RESTAURACJA" styleClass="topbar-title"/>
+        </HBox>
+    </top>
 
-        <Button fx:id="loginButton"
-                text="Zaloguj się"
-                onMouseClicked="#onLoginClick"
-                maxWidth="400"/>
-        <Button fx:id="registerButton"
-                text="Zarejestruj się"
-                onAction="#onRegisterClick"
-                maxWidth="400"/>
-    </VBox>
+    <!-- ŚRODEK -->
+    <center>
+        <HBox alignment="CENTER" spacing="110" styleClass="main-content">
 
-</AnchorPane>
+            <!-- LEWA STRONA: slider -->
+            <VBox alignment="CENTER" spacing="16">
+                <StackPane styleClass="image-card">
+                    <ImageView fx:id="sliderImageView"
+                               fitWidth="420"
+                               fitHeight="320"
+                               preserveRatio="true"
+                               smooth="true"/>
+                </StackPane>
+
+                <!-- KROPKI -->
+                <HBox fx:id="dotsBox" alignment="CENTER" spacing="10"/>
+            </VBox>
+
+            <!-- PRAWA STRONA: tekst + tagi + przyciski -->
+            <VBox alignment="CENTER" spacing="18" prefWidth="420">
+
+                <Label text="Twoje ulubione dania w jednym miejscu"
+                       wrapText="true"
+                       styleClass="hero-title"
+                       maxWidth="420"
+                       alignment="CENTER"/>
+
+                <FlowPane alignment="CENTER" hgap="12" vgap="12">
+                    <Label text="Sprawdzone receptury" styleClass="tag"/>
+                    <Label text="Szybka obsługa" styleClass="tag"/>
+                    <Label text="Z miłości do jedzenia" styleClass="tag"/>
+                    <Label text="Świeże składniki" styleClass="tag"/>
+                </FlowPane>
+
+                <VBox spacing="12" alignment="CENTER" maxWidth="340">
+                    <Button text="Zaloguj się"
+                            maxWidth="340"
+                            styleClass="btn-primary"
+                            onAction="#onLoginClick"/>
+
+                    <Button text="Zarejestruj się"
+                            maxWidth="340"
+                            styleClass="btn-outline"
+                            onAction="#onRegisterClick"/>
+                </VBox>
+
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.ProductProfileController"
+            stylesheets="@/styles/app.css">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
+            <padding>
+                <Insets top="18" right="24" bottom="18" left="24"/>
+            </padding>
+
+            <Label text="RESTAURACJA" styleClass="topbar-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="18" alignment="TOP_CENTER" styleClass="page">
+            <padding>
+                <Insets top="18" right="24" bottom="24" left="24"/>
+            </padding>
+
+            <!-- banner (opcjonalnie) -->
+            <ImageView fx:id="bannerImage" fitWidth="980" preserveRatio="true" styleClass="banner"/>
+
+            <HBox spacing="18" alignment="TOP_LEFT" maxWidth="980" styleClass="profile-wrap">
+                <!-- LEFT: back + obrazek -->
+                <VBox spacing="12" alignment="TOP_LEFT" prefWidth="360">
+                    <Button text="←" onAction="#onBack" styleClass="back-btn"/>
+
+                    <StackPane fx:id="imageCard" styleClass="profile-image-card">
+                        <ImageView fx:id="productImage" fitWidth="260" fitHeight="200" preserveRatio="true"/>
+                        <Button fx:id="imageEditBtn" text="✎" onAction="#onChangeImage" styleClass="profile-image-edit"/>
+                    </StackPane>
+                </VBox>
+
+                <!-- RIGHT: dane -->
+                <VBox spacing="10" alignment="TOP_LEFT" HBox.hgrow="ALWAYS">
+                    <!-- VIEW MODE -->
+                    <VBox fx:id="viewBox" spacing="8">
+                        <Label fx:id="nameLabel" text="Nazwa dania" styleClass="profile-title"/>
+                        <Label fx:id="priceLabel" text="0.00 zł" styleClass="profile-price"/>
+
+                        <!-- USER: wybór opcji (bez zapisu do bazy) -->
+                        <HBox fx:id="vegRow" spacing="10" alignment="CENTER_LEFT" visible="false" managed="false">
+                            <!-- USER -->
+                            <CheckBox fx:id="vegCheck" text="Wege" />
+
+                            <!-- ADMIN (nieklikalne) -->
+                            <Label fx:id="vegAdminLabel" text="Wege" visible="false" managed="false" styleClass="chip-readonly"/>
+
+                            <Label fx:id="vegSurchargeLabel" text="+0 zł" styleClass="small-muted"/>
+                        </HBox>
+
+                        <Label fx:id="sauceTitle" text="Sos do wyboru:" styleClass="profile-subtitle" visible="false" managed="false"/>
+                        <FlowPane fx:id="sauceChoicesPane" hgap="10" vgap="10" visible="false" managed="false"/>
+
+                        <HBox fx:id="adminActionsRow" spacing="14" alignment="CENTER_LEFT" styleClass="profile-actions">
+                            <Button text="Edytuj" onAction="#onEdit" styleClass="btn-primary"/>
+                            <Button text="Usuń" onAction="#onDelete" styleClass="btn-danger-outline"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- EDIT MODE -->
+                    <VBox fx:id="editBox" spacing="12" visible="false" managed="false">
+
+                        <TextField fx:id="nameField" styleClass="profile-input"/>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="priceField" styleClass="profile-input-sm"/>
+                            <Label text="zł" styleClass="small-muted"/>
+                        </HBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="vegAvailableCheck" text="Opcja Wege dostępna"/>
+                            <TextField fx:id="vegSurchargeField" promptText="Dopłata (np. 3.00)" styleClass="profile-input-sm"/>
+                            <Label text="zł" styleClass="small-muted"/>
+                        </HBox>
+
+                        <Label text="Sosy (admin):" styleClass="profile-subtitle"/>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="newSauceField" promptText="np. Bazyliowy" styleClass="profile-input-sm"/>
+                            <Button text="Dodaj" onAction="#onAddSauce" styleClass="btn-outline"/>
+                        </HBox>
+
+                        <FlowPane fx:id="sauceEditPane" hgap="10" vgap="10"/>
+
+                        <HBox spacing="14" alignment="CENTER_LEFT" styleClass="profile-actions">
+                            <Button text="Cofnij" onAction="#onCancelEdit" styleClass="btn-outline"/>
+                            <Button text="Zapisz zmiany" onAction="#onSave" styleClass="btn-primary"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

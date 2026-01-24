@@ -19,4 +19,9 @@ public class Category {
     public String toCSV() {
         return id + ";" + name;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

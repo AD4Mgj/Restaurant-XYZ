@@ -1,48 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.AddProductController"
-            prefWidth="500" prefHeight="400">
+            stylesheets="@/styles/app.css"
+            styleClass="dialog-root">
 
     <center>
-        <VBox spacing="12" alignment="CENTER">
+        <VBox spacing="14" alignment="TOP_CENTER" styleClass="dialog-card" maxWidth="520">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="22" right="26" bottom="22" left="26"/>
             </padding>
 
-            <Label text="Dodaj produkt" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-
-            <TextField fx:id="nameField"
-                       promptText="Nazwa produktu"
-                       prefWidth="250"/>
-
-            <TextField fx:id="priceField"
-                       promptText="Cena"
-                       prefWidth="250"/>
-
-            <HBox spacing="10" alignment="CENTER">
-                <Label text="Kategoria:"/>
-                <ComboBox fx:id="categoryCombo" prefWidth="180"/>
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Dodaj informacje" styleClass="dialog-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="✕" onAction="#onCancel" styleClass="icon-btn"/>
             </HBox>
 
-            <HBox spacing="10" alignment="CENTER">
-                <Label text="Zdjęcie:"/>
-                <Button text="Wybierz plik" onAction="#onChooseImage"/>
-            </HBox>
+            <StackPane fx:id="imagePicker"
+                       styleClass="image-picker"
+                       onMouseClicked="#onChooseImage">
 
-            <Label fx:id="imagePathLabel" text="Brak wybranego zdjęcia" textFill="gray"/>
+                <!-- PODGLĄD ZDJĘCIA (domyślnie pusty) -->
+                <ImageView fx:id="previewImage"
+                           fitWidth="300"
+                           fitHeight="170"
+                           preserveRatio="true"
+                           smooth="true"/>
 
-            <HBox spacing="20" alignment="CENTER">
-                <Button text="Dodaj danie" onAction="#onAddProduct" prefWidth="120"/>
-                <Button text="Anuluj" onAction="#onCancel" prefWidth="120"/>
-            </HBox>
+                <!-- RAMKA + PLUS (widoczna tylko gdy NIE ma zdjęcia) -->
+                <StackPane fx:id="emptyState" styleClass="image-empty">
+                    <Label fx:id="plusLabel" text="+" styleClass="image-plus"/>
+                </StackPane>
 
-            <Label fx:id="messageLabel" textFill="green"/>
+                <!-- KRZYŻYK NA ZDJĘCIU (widoczny tylko gdy jest zdjęcie) -->
+                <Button fx:id="removeImageBtn"
+                        text="✕"
+                        onAction="#onRemoveImage"
+                        styleClass="image-remove-btn"
+                        visible="false"
+                        managed="false"
+                        StackPane.alignment="TOP_RIGHT"/>
+            </StackPane>
+
+            <VBox spacing="6" maxWidth="420">
+                <Label text="Nazwa" styleClass="field-label"/>
+                <TextField fx:id="nameField" prefWidth="420" maxWidth="420" styleClass="field"/>
+            </VBox>
+
+            <VBox spacing="6" maxWidth="420">
+                <Label text="Cena" styleClass="field-label"/>
+                <TextField fx:id="priceField" prefWidth="420" maxWidth="420" styleClass="field"/>
+            </VBox>
+
+            <VBox spacing="6" maxWidth="420">
+                <Label text="Kategoria" styleClass="field-label"/>
+                <ComboBox fx:id="categoryCombo" prefWidth="420" maxWidth="420" styleClass="field"/>
+            </VBox>
+
+            <Label fx:id="messageLabel" wrapText="true" styleClass="error-text"/>
+
+            <Button text="Dodaj danie"
+                    maxWidth="420"
+                    styleClass="btn-primary"
+                    onAction="#onAddProduct"/>
+
+            <Button text="Anuluj"
+                    maxWidth="420"
+                    styleClass="btn-link"
+                    onAction="#onCancel"/>
 
         </VBox>
     </center>

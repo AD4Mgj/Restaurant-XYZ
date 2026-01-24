@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.event.ActionEvent;
+
 
 import java.util.Objects;
 import java.util.logging.Level;
@@ -46,6 +48,23 @@ public class SceneUtils {
             LOGGER.log(Level.SEVERE, "Error changing scene", e);
         }
     }
+
+    public static void changeScene(ActionEvent event, String fxmlFile) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent root = loadFXML(fxmlFile);
+
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+            stage.setScene(scene);
+
+            Platform.runLater(stage::centerOnScreen);
+            stage.show();
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error changing scene", e);
+        }
+    }
+
 
     public static void changeScene(String fxmlFile) {
         try {

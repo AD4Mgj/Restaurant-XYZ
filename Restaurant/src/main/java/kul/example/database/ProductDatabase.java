@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductDatabase {
@@ -25,13 +26,26 @@ public class ProductDatabase {
                 String[] parts = line.split(";");
                 if (parts.length < 5) continue;
 
-                list.add(new Product(
-                        Integer.parseInt(parts[0]),
-                        parts[1],
-                        Double.parseDouble(parts[2]),
-                        parts[3],
-                        Integer.parseInt(parts[4])
-                ));
+                int id = Integer.parseInt(parts[0]);
+                String name = parts[1];
+                double price = Double.parseDouble(parts[2].replace(",", "."));
+                String imagePath = parts[3];
+                int categoryId = Integer.parseInt(parts[4]);
+
+                // domyślne wartości (dla starych CSV)
+                boolean vegAvailable = false;
+                double vegSurcharge = 0.0;
+                List<String> sauces = new ArrayList<>();
+
+                // jeśli CSV ma nowe kolumny:
+                if (parts.length >= 6) vegAvailable = Boolean.parseBoolean(parts[5]);
+                if (parts.length >= 7) vegSurcharge = safeDouble(parts[6]);
+                if (parts.length >= 8 && parts[7] != null && !parts[7].isBlank()) {
+                    sauces = new ArrayList<>(Arrays.asList(parts[7].split("\\|")));
+                    sauces.removeIf(s -> s == null || s.isBlank());
+                }
+
+                list.add(new Product(id, name, price, imagePath, categoryId, vegAvailable, vegSurcharge, sauces));
             }
 
         } catch (Exception e) {
@@ -39,6 +53,14 @@ public class ProductDatabase {
         }
 
         return list;
+    }
+
+    private static double safeDouble(String s) {
+        try {
+            return Double.parseDouble(s.trim().replace(",", "."));
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 
     public static int getNextId() {
@@ -65,7 +87,7 @@ public class ProductDatabase {
     public static void saveAll(List<Product> products) {
         try (FileWriter fw = new FileWriter(FILE_PATH)) {
 
-            fw.write("id;name;price;imagePath;categoryId\n");
+            fw.write("id;name;price;imagePath;categoryId;vegAvailable;vegSurcharge;sauces\n");
 
             for (Product p : products) {
                 fw.write(p.toCSV() + "\n");
