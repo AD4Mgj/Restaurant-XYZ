@@ -9,6 +9,7 @@ import kul.example.model.User;
 import kul.example.service.CartService;
 import kul.example.service.InvoiceGenerator;
 import kul.example.service.UserSession;
+import kul.example.service.WalletService;
 import kul.example.utils.Dialogs;
 import kul.example.utils.SceneUtils;
 
@@ -106,11 +107,9 @@ public class CartController {
             return;
         }
 
-        // Wybór paragon / faktura
         Optional<Boolean> docChoice = Dialogs.showInvoiceChoiceDialog();
 
         if (docChoice.isEmpty()) {
-            // anulowano
             return;
         }
 
@@ -120,21 +119,30 @@ public class CartController {
             return;
         }
 
-        String username = currentUser.getEmail();
-
         double subtotal = CartService.getSubtotal();
         double delivery = CartService.getDeliveryFee();
         double service = CartService.getServiceFee();
         double total = CartService.getTotal();
 
+        if (!WalletService.canAfford(currentUser, total)) {
+            Dialogs.showInfo("Za mało środków w portfelu!");
+            return;
+        }
+
+        boolean success = WalletService.withdraw(currentUser, total);
+        if (!success) {
+            Dialogs.showInfo("Nie udało się pobrać środków.");
+            return;
+        }
+
         InvoiceGenerator generator = new InvoiceGenerator();
 
         if (docChoice.get()) {
-            generator.generateInvoice(username, address, subtotal, delivery, service, total);
-            Dialogs.showInfo("Invoice generated.");
+            generator.generateInvoice(currentUser.getEmail(), address, subtotal, delivery, service, total);
+            Dialogs.showInfo("Wygenerowano fakturę.");
         } else {
-            generator.generateReceipt(username, address, subtotal, delivery, service, total);
-            Dialogs.showInfo("Receipt generated.");
+            generator.generateReceipt(currentUser.getEmail(), address, subtotal, delivery, service, total);
+            Dialogs.showInfo("Wygenerowano paragon.");
         }
 
         CartService.clear();
@@ -142,7 +150,6 @@ public class CartController {
         updateSummary();
         addressField.clear();
     }
-
 
     public static class CartItemRow {
 

@@ -4,9 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import kul.example.database.UserDatabase;
 import kul.example.model.User;
 import kul.example.service.UserSession;
+import kul.example.service.WalletService;
 import kul.example.utils.SceneUtils;
 
 public class WalletController {
@@ -77,22 +77,18 @@ public class WalletController {
             return;
         }
 
-        double currentBalance = currentUser.getWallet();
+        boolean success;
 
-        if (!deposit && amount > currentBalance) {
-            errorLabel.setText("Brak wystarczających środków.");
-            return;
+        if (deposit) {
+            WalletService.deposit(currentUser, amount);
+            success = true;
+        } else {
+            success = WalletService.withdraw(currentUser, amount);
+            if (!success) {
+                errorLabel.setText("Brak wystarczających środków.");
+                return;
+            }
         }
-
-        double newBalance = deposit
-                ? currentBalance + amount
-                : currentBalance - amount;
-
-        // 🔄 aktualizacja w pamięci
-        currentUser.setWallet(newBalance);
-
-        // 💾 zapis do CSV
-        UserDatabase.updateUserWallet(currentUser);
 
         updateBalanceLabel();
         amountField.clear();
