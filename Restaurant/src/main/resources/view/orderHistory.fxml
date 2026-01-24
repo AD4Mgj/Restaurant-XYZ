@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.OrderHistoryController"
+            prefWidth="800" prefHeight="600">
+
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button text="←" onAction="#onBackClick"/>
+
+            <Label text="Historia zamówień"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TableView fx:id="orderTable" prefHeight="500">
+
+                <columns>
+                    <TableColumn fx:id="idColumn"
+                                 text="ID"
+                                 prefWidth="60"/>
+
+                    <TableColumn fx:id="addressColumn"
+                                 text="Adres dostawy"
+                                 prefWidth="250"/>
+
+                    <TableColumn fx:id="totalColumn"
+                                 text="Kwota"
+                                 prefWidth="120"/>
+
+                    <TableColumn fx:id="dateColumn"
+                                 text="Data"
+                                 prefWidth="200"/>
+                </columns>
+
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

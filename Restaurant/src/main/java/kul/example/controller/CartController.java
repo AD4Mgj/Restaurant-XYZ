@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import kul.example.model.Product;
 import kul.example.model.User;
-import kul.example.service.CartService;
-import kul.example.service.InvoiceGenerator;
-import kul.example.service.UserSession;
-import kul.example.service.WalletService;
+import kul.example.service.*;
 import kul.example.utils.Dialogs;
 import kul.example.utils.SceneUtils;
 
@@ -149,6 +146,15 @@ public class CartController {
         loadCart();
         updateSummary();
         addressField.clear();
+
+        OrderService.saveOrder(
+                currentUser.getEmail(),
+                address,
+                subtotal,
+                delivery,
+                service,
+                total
+        );
     }
 
     public static class CartItemRow {

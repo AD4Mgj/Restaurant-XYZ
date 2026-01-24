@@ -1,84 +1,34 @@
 package kul.example.model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 public class Order {
-    private int id;
-    private int userId;
-    private List<OrderItem> orderItems;
-    private double totalPrice;
-    private Date date;
+    private long id;
+    private String userEmail;
+    private String address;
+    private double subtotal;
+    private double delivery;
+    private double service;
+    private double total;
+    private String timestamp;
 
-    public Order(int id, int userId, List<OrderItem> orderItems, double totalPrice, Date date) {
+    public Order(long id, String userEmail, String address,
+                 double subtotal, double delivery, double service, double total,
+                 String timestamp) {
         this.id = id;
-        this.userId = userId;
-        this.orderItems = orderItems;
-        this.totalPrice = totalPrice;
-        this.date = date;
+        this.userEmail = userEmail;
+        this.address = address;
+        this.subtotal = subtotal;
+        this.delivery = delivery;
+        this.service = service;
+        this.total = total;
+        this.timestamp = timestamp;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", orderItems=" + orderItems +
-                ", totalPrice=" + totalPrice +
-                ", date=" + date +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return id == order.id && userId == order.userId && Double.compare(totalPrice, order.totalPrice) == 0 && Objects.equals(orderItems, order.orderItems) && Objects.equals(date, order.date);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId, orderItems, totalPrice, date);
-    }
+    public long getId() { return id; }
+    public String getUserEmail() { return userEmail; }
+    public String getAddress() { return address; }
+    public double getSubtotal() { return subtotal; }
+    public double getDelivery() { return delivery; }
+    public double getService() { return service; }
+    public double getTotal() { return total; }
+    public String getTimestamp() { return timestamp; }
 }

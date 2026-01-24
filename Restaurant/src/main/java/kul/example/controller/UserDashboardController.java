@@ -16,6 +16,11 @@ public class UserDashboardController {
         SceneUtils.changeScene("/view/welcomeScreen.fxml");
     }
 
+    @FXML
+    private void onOrderHistory() {
+        SceneUtils.changeScene("/view/orderHistory.fxml");
+    }
+
     public void onWallet() {
         SceneUtils.changeScene("/view/wallet.fxml");
     }

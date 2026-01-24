@@ -13,8 +13,6 @@
         <Label text="Witaj w restauracji!"
                style="-fx-font-size: 22px; -fx-font-weight: bold;"
                BorderPane.alignment="CENTER"/>
-<!--               BorderPane.margin="20"-->
-<!--        />-->
     </top>
 
     <center>
@@ -24,9 +22,13 @@
                     prefWidth="200"
                     onAction="#onBrowseMenu"/>
 
-            <Button text="Moj Portfel"
+            <Button text="Mój Portfel"
                     prefWidth="200"
                     onAction="#onWallet"/>
+
+            <Button text="Historia zamówień"
+                    prefWidth="200"
+                    onAction="#onOrderHistory"/>
 
             <Button text="Wyloguj"
                     prefWidth="200"
