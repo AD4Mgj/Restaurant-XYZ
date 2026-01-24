@@ -30,6 +30,11 @@
             <Button text="Wyczyść filtr"
                     onAction="#onClearFilter"/>
 
+            <HBox spacing="8" alignment="CENTER_RIGHT" onMouseClicked="#onCartClick">
+                <Label fx:id="cartIcon" text="🛒" style="-fx-font-size: 24px;"/>
+                <Label fx:id="cartCount" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            </HBox>
+
         </HBox>
     </top>
 
@@ -49,5 +54,4 @@
 
         </ScrollPane>
     </center>
-
 </BorderPane>

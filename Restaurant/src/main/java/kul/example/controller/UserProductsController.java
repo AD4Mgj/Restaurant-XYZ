@@ -10,6 +10,7 @@ import kul.example.database.CategoryDatabase;
 import kul.example.database.ProductDatabase;
 import kul.example.model.Category;
 import kul.example.model.Product;
+import kul.example.service.CartService;
 import kul.example.utils.SceneUtils;
 
 import java.util.List;
@@ -24,9 +25,21 @@ public class UserProductsController {
     private FlowPane productContainer;
 
     @FXML
+    private Label cartIcon;
+
+    @FXML
+    private Label cartCount;
+
+    private void updateCartCounter() {
+        cartCount.setText(String.valueOf(CartService.size()));
+    }
+
+
+    @FXML
     public void initialize() {
         loadCategories();
         loadProducts(null);
+        updateCartCounter();
     }
 
     private void loadCategories() {
@@ -74,6 +87,15 @@ public class UserProductsController {
 
         box.getChildren().addAll(name, price, category, image);
 
+        box.setOnMouseClicked(event -> {
+            CartService.add(product);
+            updateCartCounter();
+            System.out.println("Dodano do koszyka: " + product.getName());
+        });
+
+        box.setOnMouseEntered(e -> box.setStyle("-fx-border-color: #888; -fx-background-color: #f9f9f9;"));
+        box.setOnMouseExited(e -> box.setStyle("-fx-border-color: #cccccc; -fx-background-color: transparent;"));
+
         return box;
     }
 
@@ -98,6 +120,11 @@ public class UserProductsController {
     private void onClearFilter() {
         categoryFilter.getSelectionModel().clearSelection();
         loadProducts(null);
+    }
+
+    @FXML
+    private void onCartClick() {
+        SceneUtils.changeScene("/view/cart.fxml");
     }
 
 }

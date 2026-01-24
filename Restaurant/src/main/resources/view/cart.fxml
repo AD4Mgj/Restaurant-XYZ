@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kul.example.controller.CartController"
+            prefWidth="800" prefHeight="600">
+
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button text="←" onAction="#onBackClick"/>
+
+            <Label text="Koszyk"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Produkty w koszyku:"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <TableView fx:id="cartTable" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="nameColumn" text="Produkt" prefWidth="250"/>
+                    <TableColumn fx:id="quantityColumn" text="Ilość" prefWidth="80"/>
+                    <TableColumn fx:id="priceColumn" text="Cena za szt." prefWidth="120"/>
+                    <TableColumn fx:id="totalColumn" text="Razem" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Adres dostawy:"/>
+                <TextField fx:id="addressField" prefWidth="400"/>
+            </HBox>
+
+            <VBox spacing="5" alignment="CENTER_RIGHT">
+                <Label fx:id="subtotalLabel" text="Suma: 0.00 zł"/>
+                <Label fx:id="deliveryLabel" text="Dostawa: 5.00 zł"/>
+                <Label fx:id="serviceLabel" text="Opłata serwisowa: 0.00 zł"/>
+                <Label fx:id="totalLabel" text="Do zapłaty: 0.00 zł"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Wyczyść koszyk" onAction="#onClearCartClick"/>
+                <Button text="Zamów" onAction="#onOrderClick"/>
+            </HBox>
+
+        </VBox>
+    </bottom>
+
+</BorderPane>
