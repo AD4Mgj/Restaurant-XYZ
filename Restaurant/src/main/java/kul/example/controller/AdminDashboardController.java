@@ -65,6 +65,12 @@ public class AdminDashboardController {
         }
     }
 
+    @FXML
+    private void onOrders() {
+        SceneUtils.changeScene("/view/adminOrders.fxml");
+    }
+
+
     private void loadBanner() {
         // Wrzuć banner do: src/main/resources/images/banner.png
         try (InputStream is = getClass().getResourceAsStream("/images/banner.png")) {

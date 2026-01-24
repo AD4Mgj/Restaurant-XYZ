@@ -71,4 +71,37 @@ public class OrderRepository {
             return 1;
         }
     }
+
+    public static List<Order> findAll() {
+        List<Order> list = new ArrayList<>();
+
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE));
+
+            for (int i = 1; i < lines.size(); i++) {
+                String line = lines.get(i);
+                String[] parts = line.split(";");
+
+                if (parts.length < 8) continue;
+
+                list.add(new Order(
+                        Long.parseLong(parts[0]),
+                        parts[1],
+                        parts[2],
+                        Double.parseDouble(parts[3]),
+                        Double.parseDouble(parts[4]),
+                        Double.parseDouble(parts[5]),
+                        Double.parseDouble(parts[6]),
+                        parts[7]
+                ));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
 }

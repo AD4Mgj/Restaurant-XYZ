@@ -22,6 +22,10 @@
 
             <!-- (opcjonalnie) logout w prawym rogu -->
             <Button text="Wyloguj" onAction="#onLogout" styleClass="topbar-logout"/>
+            <Button text="Zamówienia"
+                    prefWidth="200"
+                    onAction="#onOrders"/>
+
         </HBox>
     </top>
 
