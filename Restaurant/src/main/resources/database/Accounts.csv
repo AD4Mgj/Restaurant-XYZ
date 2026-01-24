@@ -1,5 +1,6 @@
 id;email;password;firstName;lastName;wallet;role
 1;admin;admin123;Admin;Root;40.0;ADMIN
-2;adam;adam;adam;adam;43.7;USER
-3;evelinka@gmail.com;evelina02E;Evelinka;Evelinkowska;20.0;USER
-4;adam2@gmail.com;Adam1234;Adaś;nie Adam;399864.8;USER
+2;test;testtest;Test;Testowy;645.6;USER
+3;adam;adam;adam;adam;43.7;USER
+4;evelinka@gmail.com;evelina02E;Evelinka;Evelinkowska;20.0;USER
+5;adam2@gmail.com;Adam1234;Adaś;nie Adam;399864.8;USER

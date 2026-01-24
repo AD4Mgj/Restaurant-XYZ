@@ -47,6 +47,8 @@ public class OrderHistoryController {
         ObservableList<Order> list = FXCollections.observableArrayList(
                 OrderRepository.findByUser(email)
         );
+
+        FXCollections.reverse(list);
         orderTable.setItems(list);
     }
 }
