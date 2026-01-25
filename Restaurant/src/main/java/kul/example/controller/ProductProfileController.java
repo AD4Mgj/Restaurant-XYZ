@@ -2,6 +2,8 @@ package kul.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -16,6 +18,7 @@ import kul.example.database.ProductDatabase;
 import kul.example.model.Product;
 import kul.example.service.UserSession;
 import kul.example.utils.SceneUtils;
+import kul.example.service.CartService;
 
 import java.io.File;
 import java.io.InputStream;
@@ -39,14 +42,21 @@ public class ProductProfileController {
     @FXML private TextField nameField;
     @FXML private TextField priceField;
 
+    @FXML private Label totalLabel;
+    @FXML private HBox totalRow;
+
     // USER (view)
     @FXML private HBox vegRow;
     @FXML private Label vegAdminLabel;
     @FXML private CheckBox vegCheck;
     @FXML private Label vegSurchargeLabel;
+    @FXML private HBox userActionsRow;
 
     @FXML private Label sauceTitle;
     @FXML private FlowPane sauceChoicesPane;
+
+    @FXML private Button cartBtn;
+    @FXML private Label cartBadge;
 
     // ADMIN (edit)
     @FXML private CheckBox vegAvailableCheck;
@@ -62,6 +72,8 @@ public class ProductProfileController {
 
     private Product product;
     private boolean adminMode = false;
+
+    private boolean editMode = false;
 
     // user selections (nie zapisujemy do bazy)
     private ToggleGroup sauceGroup = new ToggleGroup();
@@ -80,28 +92,49 @@ public class ProductProfileController {
         setupImagePencilPosition();
         setImageEditVisible(false); // na starcie ukryty
 
+        updateCartBadge();
         renderView();
     }
 
+    private void updateCartBadge() {
+        if (cartBadge == null) return;
+
+        int count = CartService.size();
+
+        if (count <= 0) {
+            cartBadge.setVisible(false);
+            cartBadge.setManaged(false);
+        } else {
+            cartBadge.setText(String.valueOf(count));
+            cartBadge.setVisible(true);
+            cartBadge.setManaged(true);
+        }
+    }
+
     private void setupModeUI() {
-        // user nie ma edycji obrazka
-        if (!adminMode && imageEditBtn != null) {
+        // ołówek tylko w trybie edycji admina
+        if (imageEditBtn != null) {
             imageEditBtn.setVisible(false);
             imageEditBtn.setManaged(false);
-        }
-
-        // user nigdy nie widzi editBox
-        if (!adminMode) {
-            editBox.setVisible(false);
-            editBox.setManaged(false);
-
-            viewBox.setVisible(true);
-            viewBox.setManaged(true);
         }
 
         if (!adminMode && adminActionsRow != null) {
             adminActionsRow.setVisible(false);
             adminActionsRow.setManaged(false);
+        }
+
+        // user button only for USER
+        if (userActionsRow != null) {
+            boolean showUserActions = !adminMode;
+            userActionsRow.setVisible(showUserActions);
+            userActionsRow.setManaged(showUserActions);
+        }
+
+        if (!adminMode) {
+            editBox.setVisible(false);
+            editBox.setManaged(false);
+            viewBox.setVisible(true);
+            viewBox.setManaged(true);
         }
     }
 
@@ -141,6 +174,44 @@ public class ProductProfileController {
 
         renderUserChoices();
         renderAdminEditFields();
+
+        setupLiveTotalListeners();
+        updateTotal();
+    }
+
+    private boolean totalListenersBound = false;
+
+    private void setupLiveTotalListeners() {
+        if (adminMode) {
+            // dla admina możesz ukryć total (opcjonalnie)
+            if (totalRow != null) {
+                totalRow.setVisible(false);
+                totalRow.setManaged(false);
+            }
+            return;
+        }
+
+        if (totalListenersBound) return;
+        totalListenersBound = true;
+
+        if (vegCheck != null) {
+            vegCheck.selectedProperty().addListener((obs, oldV, newV) -> updateTotal());
+        }
+
+        if (sauceGroup != null) {
+            sauceGroup.selectedToggleProperty().addListener((obs, oldV, newV) -> updateTotal());
+        }
+    }
+
+    private void updateTotal() {
+        if (totalLabel == null || product == null) return;
+
+        double total = product.getPrice();
+
+        boolean vegSelected = vegCheck != null && vegCheck.isVisible() && vegCheck.isSelected();
+        if (vegSelected) total += product.getVegSurcharge();
+
+        totalLabel.setText(String.format("%.2f zł", total));
     }
 
     private void renderUserChoices() {
@@ -209,10 +280,12 @@ public class ProductProfileController {
                         rb.setToggleGroup(sauceGroup);
                         rb.getStyleClass().add("chip-radio");
                         sauceChoicesPane.getChildren().add(rb);
+                        sauceGroup.selectedToggleProperty().addListener((obs, oldV, newV) -> updateTotal());
                     }
                 }
             }
         }
+        updateTotal();
     }
 
     private void renderAdminEditFields() {
@@ -298,6 +371,49 @@ public class ProductProfileController {
         }
     }
 
+    @FXML
+    private void onAddToCart() {
+        if (adminMode || product == null) return;
+
+        boolean vegSelected = vegCheck != null && vegCheck.isVisible() && vegCheck.isSelected();
+        double finalPrice = product.getPrice() + (vegSelected ? product.getVegSurcharge() : 0.0);
+
+        // wybrany sos (radio)
+        String sauceSelected = null;
+        if (sauceGroup != null && sauceGroup.getSelectedToggle() instanceof RadioButton rb) {
+            sauceSelected = rb.getText();
+        }
+
+        // nazwa do koszyka (żeby było widać co user wybrał)
+        String name = product.getName() == null ? "" : product.getName();
+        List<String> opts = new ArrayList<>();
+        if (vegSelected) opts.add("Wege");
+        if (sauceSelected != null && !sauceSelected.isBlank()) opts.add("Sos: " + sauceSelected);
+        if (!opts.isEmpty()) name += " (" + String.join(", ", opts) + ")";
+
+        // robimy „pozycję koszyka” jako nowy Product (bez grzebania w modelu koszyka)
+        Product cartItem = new Product(
+                product.getId(),
+                name,
+                finalPrice,
+                product.getImagePath(),
+                product.getCategoryId(),
+                false,
+                0.0,
+                new ArrayList<>()
+        );
+
+        CartService.add(cartItem);
+        showInfo("Koszyk", "Dodano do koszyka.");
+        updateCartBadge();
+    }
+
+    @FXML
+    private void onOpenCart() {
+        UserSession.setCartReturnView("/view/productProfile.fxml");
+        SceneUtils.changeScene("/view/cart.fxml");
+    }
+
     private void goBack() {
         if (adminMode) SceneUtils.changeScene("/view/adminDashboard.fxml");
         else SceneUtils.changeScene("/view/userProducts.fxml");
@@ -311,6 +427,7 @@ public class ProductProfileController {
     @FXML
     private void onEdit() {
         if (!adminMode) return;
+        editMode = true;
 
         viewBox.setVisible(false);
         viewBox.setManaged(false);
@@ -318,23 +435,27 @@ public class ProductProfileController {
         editBox.setVisible(true);
         editBox.setManaged(true);
 
-        editing = true;
-        setImageEditVisible(true);
-
+        if (imageEditBtn != null) {
+            imageEditBtn.setVisible(true);
+            imageEditBtn.setManaged(true);
+        }
     }
 
     @FXML
     private void onCancelEdit() {
         if (!adminMode) return;
+        editMode = false;
+
+        if (imageEditBtn != null) {
+            imageEditBtn.setVisible(false);
+            imageEditBtn.setManaged(false);
+        }
 
         editBox.setVisible(false);
         editBox.setManaged(false);
 
         viewBox.setVisible(true);
         viewBox.setManaged(true);
-
-        editing = false;
-        setImageEditVisible(false);
 
         renderView();
     }

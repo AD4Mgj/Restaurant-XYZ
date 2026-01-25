@@ -29,7 +29,7 @@ public class OrderHistoryController {
 
     @FXML
     private void onBackClick() {
-        SceneUtils.changeScene("/view/userDashboard.fxml");
+        SceneUtils.changeScene("/view/userProducts.fxml");
     }
 
     @FXML

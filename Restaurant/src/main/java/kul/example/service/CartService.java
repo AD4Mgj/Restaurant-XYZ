@@ -47,4 +47,21 @@ public class CartService {
     public static void clear() {
         cart.clear();
     }
+
+    public static void removeOne(Product p) {
+        if (p == null) return;
+
+        for (int i = cart.size() - 1; i >= 0; i--) {
+            if (cart.get(i).equals(p)) {
+                cart.remove(i);
+                return;
+            }
+        }
+    }
+
+    public static void removeAll(Product p) {
+        if (p == null) return;
+
+        cart.removeIf(item -> item.equals(p));
+    }
 }

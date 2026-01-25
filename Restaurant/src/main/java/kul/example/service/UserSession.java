@@ -40,4 +40,19 @@ public class UserSession {
     public static void setProductViewMode(ProductViewMode mode) {
         productViewMode = (mode == null) ? ProductViewMode.USER : mode;
     }
+
+    // ===== Cart navigation (skąd otwarto koszyk) =====
+    private static String cartReturnView = null;
+
+    public static void setCartReturnView(String fxmlPath) {
+        cartReturnView = fxmlPath;
+    }
+
+    public static String getCartReturnView() {
+        return cartReturnView;
+    }
+
+    public static void clearCartReturnView() {
+        cartReturnView = null;
+    }
 }

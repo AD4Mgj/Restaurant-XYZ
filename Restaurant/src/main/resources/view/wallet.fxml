@@ -3,35 +3,50 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.WalletController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefWidth="1100.0" prefHeight="700.0"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
 
-    <VBox spacing="10" alignment="CENTER"
-          AnchorPane.topAnchor="0"
-          AnchorPane.bottomAnchor="0"
-          AnchorPane.leftAnchor="0"
-          AnchorPane.rightAnchor="0">
-
-        <Button text="←"
-                onAction="#onBackClick"/>
-
-        <Label text="Stan konta:"/>
-        <Label fx:id="balanceLabel"/>
-
-        <TextField fx:id="amountField"
-                   promptText="Kwota (np. 25.50)"/>
-
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Dodaj środki"
-                    onAction="#onDepositClick"/>
-            <Button text="Odejmij środki"
-                    onAction="#onWithdrawClick"/>
+    <!-- TOPBAR jak w całej apce -->
+    <top>
+        <HBox styleClass="topbar">
+            <Button text="←"
+                    styleClass="hamburger-btn"
+                    onAction="#onBackClick"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="PORTFEL" styleClass="topbar-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
         </HBox>
+    </top>
 
-        <Label fx:id="errorLabel"
-               style="-fx-text-fill: red;"/>
-    </VBox>
+    <!-- CONTENT -->
+    <center>
+        <VBox spacing="16" alignment="CENTER" styleClass="wallet-wrap">
 
-</AnchorPane>
+            <VBox spacing="6" alignment="CENTER" styleClass="wallet-card">
+                <Label text="Stan konta" styleClass="wallet-subtitle"/>
+                <Label fx:id="balanceLabel" styleClass="wallet-balance"/>
+            </VBox>
+
+            <TextField fx:id="amountField"
+                       promptText="Kwota (np. 25.50)"
+                       styleClass="wallet-field"/>
+
+            <HBox spacing="12" alignment="CENTER">
+                <Button text="Dodaj środki"
+                        styleClass="btn-primary"
+                        onAction="#onDepositClick"/>
+
+                <Button text="Odejmij środki"
+                        styleClass="btn-outline"
+                        onAction="#onWithdrawClick"/>
+            </HBox>
+
+            <Label fx:id="errorLabel" styleClass="error-text"/>
+        </VBox>
+    </center>
+
+</BorderPane>

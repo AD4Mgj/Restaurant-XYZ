@@ -37,7 +37,7 @@ public class WalletController {
 
     @FXML
     private void onBackClick() {
-        SceneUtils.changeScene("/view/userDashboard.fxml");
+        SceneUtils.changeScene("/view/userProducts.fxml");
     }
 
     private void updateBalanceLabel() {

@@ -1,3 +1,6 @@
 id;name;price;imagePath;categoryId;vegAvailable;vegSurcharge;sauces
-1;Smazony Kotek;3.0;/images/uploads/1769243046531_cat3.jpg;4;true;150.0;Bazyliowy|Serowy
-2;Bla;124.0;/images/uploads/1769252193317_354a6863993f77cb5c92b1af848ccb8f.jpg;4;false;0.0;
+2;Bla;124.0;/images/uploads/1769252193317_354a6863993f77cb5c92b1af848ccb8f.jpg;4;true;100.0;Bla
+3;Pasta z kurczakiem;35.0;/images/uploads/1769307688699_random_pasta.jpg;3;true;10.0;Bazyliowy|Pomidorowy
+6;Pizzowaty Kotek;50.0;/images/uploads/1769307783378_cat3.jpg;1;true;20.0;Bazyliowy|Pomidorowy|Pomidorowy(spicy)
+7;Smazony Kotek;15.0;/images/uploads/1769361998917_cat2.jpg;5;true;40.0;Bazyliowy|Grochowy
+8;Słodki Kotek;20.0;/images/uploads/1769362029608_cat1.jpg;4;true;40.0;Czekoladowy

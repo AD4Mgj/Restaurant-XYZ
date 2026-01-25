@@ -1,57 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="kul.example.controller.UserProductsController"
-            prefWidth="800" prefHeight="600">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="kul.example.controller.UserProductsController"
+           stylesheets="@/styles/app.css"
+           styleClass="root-bg">
 
-    <top>
-        <HBox spacing="20" alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+    <!-- ======= GŁÓWNY WIDOK ======= -->
+    <BorderPane fx:id="mainRoot">
 
-            <Button text="←"
-                    onAction="#onBackClick"/>
-
-            <Label text="Menu"
-                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
-
-            <Label text="Kategoria:"/>
-
-            <ComboBox fx:id="categoryFilter"
-                      prefWidth="200"
-                      onAction="#onFilterChanged"/>
-
-            <Button text="Wyczyść filtr"
-                    onAction="#onClearFilter"/>
-
-            <HBox spacing="8" alignment="CENTER_RIGHT" onMouseClicked="#onCartClick">
-                <Label fx:id="cartIcon" text="🛒" style="-fx-font-size: 24px;"/>
-                <Label fx:id="cartCount" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            </HBox>
-
-        </HBox>
-    </top>
-
-    <center>
-        <ScrollPane fitToWidth="true">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-
-            <FlowPane fx:id="productContainer"
-                      hgap="20" vgap="20"
-                      prefWrapLength="700">
+        <!-- TOP BAR -->
+        <top>
+            <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="12">
                 <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
+                    <Insets top="18" right="24" bottom="18" left="24"/>
                 </padding>
-            </FlowPane>
 
-        </ScrollPane>
-    </center>
-</BorderPane>
+                <!-- lewa kolumna: tytuł + hamburger pod nim -->
+                <VBox spacing="8" alignment="TOP_LEFT">
+                    <Label text="RESTAURACJA" styleClass="topbar-title"/>
+
+                    <Button fx:id="hamburgerBtn"
+                            text="☰"
+                            onAction="#onToggleDrawer"
+                            styleClass="hamburger-btn"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </top>
+
+        <!-- CENTER CONTENT -->
+        <center>
+            <!-- CAŁY EKRAN SCROLL (jak w adminie) -->
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="page-scroll">
+                <content>
+                    <VBox spacing="18" alignment="TOP_CENTER" styleClass="page">
+                        <padding>
+                            <Insets top="18" right="24" bottom="24" left="24"/>
+                        </padding>
+
+                        <!-- banner -->
+                        <ImageView fx:id="bannerImage" fitWidth="980" preserveRatio="true" styleClass="banner"/>
+
+                        <!-- search + koszyk (jeden wiersz, bez Regionów po bokach) -->
+                        <HBox alignment="CENTER_LEFT" spacing="14" maxWidth="980">
+                            <!-- SEARCH (kopiujemy 1:1 z admina, tylko dajemy hgrow) -->
+                            <StackPane styleClass="search-wrapper" HBox.hgrow="ALWAYS">
+                                <Label text="🔍"
+                                       styleClass="search-icon"
+                                       mouseTransparent="true"
+                                       StackPane.alignment="CENTER_LEFT"/>
+
+                                <TextField fx:id="searchField"
+                                           promptText="Wyszukaj danie po nazwie"
+                                           styleClass="search-field"
+                                           onKeyReleased="#onSearch"/>
+                            </StackPane>
+
+                            <!-- koszyk z badge (po prawej) -->
+                            <StackPane>
+                                <Button fx:id="cartBtn"
+                                        text="🛒"
+                                        onAction="#onOpenCart"
+                                        styleClass="cart-btn"/>
+                                <Label fx:id="cartBadge"
+                                       text="0"
+                                       visible="false"
+                                       managed="false"
+                                       styleClass="cart-badge"/>
+                            </StackPane>
+                        </HBox>
+
+                        <!-- MAIN: Kategorie + Produkty (jak w adminie: bez szarego scrollpane) -->
+                        <HBox spacing="24" alignment="TOP_CENTER" maxWidth="980">
+                            <!-- LEFT -->
+                            <VBox spacing="12" prefWidth="220" maxWidth="220">
+                                <Label text="Kategorie" styleClass="cats-title"/>
+                                <VBox fx:id="categoryContainer" spacing="10"/>
+                            </VBox>
+
+                            <!-- RIGHT (FlowPane, bez ScrollPane -> scrolluje cała strona) -->
+                            <FlowPane fx:id="productContainer"
+                                      hgap="18" vgap="18"
+                                      prefWrapLength="760"
+                                      HBox.hgrow="ALWAYS"
+                                      styleClass="products-wrap"/>
+                        </HBox>
+
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </center>
+    </BorderPane>
+
+    <!-- ======= OVERLAY (klik poza menu zamyka) ======= -->
+    <Pane fx:id="drawerOverlay"
+          visible="false" managed="false"
+          onMouseClicked="#onCloseDrawer"
+          styleClass="drawer-overlay"/>
+
+    <!-- ======= DRAWER (side menu) ======= -->
+    <VBox fx:id="drawer"
+          visible="false" managed="false"
+          styleClass="drawer">
+
+        <!-- góra: X -->
+        <Button text="✕"
+                onAction="#onCloseDrawer"
+                styleClass="drawer-close"/>
+
+        <!-- profil -->
+        <HBox spacing="12" alignment="CENTER_LEFT" styleClass="drawer-profile">
+            <Label text="👤" styleClass="drawer-avatar"/>
+            <VBox spacing="2">
+                <Label fx:id="drawerName" text="Użytkownik" styleClass="drawer-name"/>
+                <Label fx:id="drawerEmail" text="email" styleClass="drawer-sub"/>
+            </VBox>
+        </HBox>
+
+        <!-- przyciski -->
+        <Button text="Historia zamówień"
+                onAction="#onOpenOrderHistory"
+                styleClass="drawer-btn"/>
+
+        <Button text="Portfel"
+                onAction="#onOpenWallet"
+                styleClass="drawer-btn"/>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <Button text="Wyloguj się"
+                onAction="#onLogout"
+                styleClass="drawer-logout"/>
+    </VBox>
+
+</StackPane>

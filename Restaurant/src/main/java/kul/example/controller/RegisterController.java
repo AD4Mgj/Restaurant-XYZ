@@ -7,6 +7,7 @@ import kul.example.database.UserDatabase;
 import kul.example.model.User;
 import kul.example.utils.SceneUtils;
 import javafx.event.ActionEvent;
+import kul.example.service.UserSession;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -105,7 +106,6 @@ public class RegisterController {
         SceneUtils.changeScene("/view/registerDone.fxml");
     }
 
-    // ====== STEP 4: SAVE USER ======
     @FXML
     private void finishRegistration(ActionEvent event) {
         int id = UserDatabase.getNextId();
@@ -122,7 +122,9 @@ public class RegisterController {
 
         UserDatabase.saveUser(user);
 
-        SceneUtils.changeScene(event, "/view/userDashboard.fxml");
+        UserSession.set(user);
+
+        SceneUtils.changeScene(event, "/view/userProducts.fxml");
     }
 
     // ====== BACK BUTTONS (MUSZĄ ISTNIEĆ, bo masz je w FXML) ======

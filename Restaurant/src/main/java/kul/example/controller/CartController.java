@@ -1,118 +1,230 @@
 package kul.example.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+
 import kul.example.model.Product;
 import kul.example.model.User;
 import kul.example.service.*;
 import kul.example.utils.Dialogs;
 import kul.example.utils.SceneUtils;
 
-import java.util.Map;
-import java.util.Optional;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CartController {
 
-    @FXML
-    private TableView<CartItemRow> cartTable;
-
-    @FXML
-    private TableColumn<CartItemRow, String> nameColumn;
-
-    @FXML
-    private TableColumn<CartItemRow, Integer> quantityColumn;
-
-    @FXML
-    private TableColumn<CartItemRow, String> priceColumn;
-
-    @FXML
-    private TableColumn<CartItemRow, String> totalColumn;
-
-    @FXML
-    private TextField addressField;
-
-    @FXML
-    private Label subtotalLabel;
-
-    @FXML
-    private Label deliveryLabel;
-
-    @FXML
-    private Label serviceLabel;
-
-    @FXML
-    private Label totalLabel;
-
-    private final ObservableList<CartItemRow> rows = FXCollections.observableArrayList();
+    @FXML private FlowPane cartItemsPane;
+    @FXML private Label totalAmountLabel;
 
     @FXML
     public void initialize() {
-        nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
-        quantityColumn.setCellValueFactory(data -> data.getValue().quantityProperty().asObject());
-        priceColumn.setCellValueFactory(data -> data.getValue().priceProperty());
-        totalColumn.setCellValueFactory(data -> data.getValue().totalProperty());
-
-        cartTable.setItems(rows);
-
-        loadCart();
+        renderCart();
         updateSummary();
     }
 
-    private void loadCart() {
-        rows.clear();
+    // =========================
+    // Render UI
+    // =========================
 
-        for (Map.Entry<Product, Long> entry : CartService.getItemsWithCount().entrySet()) {
+    private void renderCart() {
+        if (cartItemsPane == null) return;
+
+        cartItemsPane.getChildren().clear();
+
+        Map<Product, Long> items = CartService.getItemsWithCount();
+        if (items == null || items.isEmpty()) {
+            Label empty = new Label("Koszyk jest pusty.");
+            empty.getStyleClass().add("cart-empty");
+            cartItemsPane.getChildren().add(empty);
+            return;
+        }
+
+        for (Map.Entry<Product, Long> entry : items.entrySet()) {
             Product p = entry.getKey();
-            long qty = entry.getValue();
-            rows.add(new CartItemRow(p.getName(), (int) qty, p.getPrice()));
+            int qty = entry.getValue() == null ? 0 : entry.getValue().intValue();
+            cartItemsPane.getChildren().add(createCartCard(p, qty));
         }
     }
 
-    private void updateSummary() {
-        double subtotal = CartService.getSubtotal();
-        double delivery = CartService.getDeliveryFee();
-        double service = CartService.getServiceFee();
-        double total = CartService.getTotal();
+    private Pane createCartCard(Product p, int qty) {
+        // Card root
+        HBox card = new HBox(14);
+        card.getStyleClass().add("cart-card");
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.setPadding(new Insets(14));
+        card.setPrefWidth(310);     // żeby układało się ~3 w rzędzie jak na screenie
+        card.setMinHeight(110);
 
-        subtotalLabel.setText(String.format("Suma: %.2f zł", subtotal));
-        deliveryLabel.setText(String.format("Dostawa: %.2f zł", delivery));
-        serviceLabel.setText(String.format("Opłata serwisowa: %.2f zł", service));
-        totalLabel.setText(String.format("Do zapłaty: %.2f zł", total));
+        // Image
+        StackPane imgWrap = new StackPane();
+        imgWrap.getStyleClass().add("cart-img-wrap");
+        imgWrap.setPrefSize(86, 64);
+
+        ImageView img = new ImageView();
+        img.getStyleClass().add("cart-img");
+        img.setFitWidth(74);
+        img.setFitHeight(54);
+        img.setPreserveRatio(true);
+        loadImageInto(img, p.getImagePath());
+
+        imgWrap.getChildren().add(img);
+
+        // Middle: name + chips
+        VBox mid = new VBox(8);
+        mid.setAlignment(Pos.TOP_LEFT);
+
+        ParsedName parsed = parseName(p.getName());
+
+        Label name = new Label(parsed.baseName);
+        name.getStyleClass().add("cart-item-name");
+        name.setWrapText(true);
+        name.setMaxWidth(190);
+        name.setMinWidth(0);
+
+        VBox chipsCol = new VBox(6);
+        chipsCol.setAlignment(Pos.TOP_LEFT);
+
+        if (parsed.veg) {
+            Label chipVeg = new Label("🟢 Wege");
+            chipVeg.getStyleClass().addAll("cart-chip", "cart-chip-veg");
+            chipsCol.getChildren().add(chipVeg);
+        }
+        if (parsed.sauce != null && !parsed.sauce.isBlank()) {
+            Label chipSauce = new Label(parsed.sauce);
+            chipSauce.getStyleClass().addAll("cart-chip", "cart-chip-sauce");
+            chipsCol.getChildren().add(chipSauce);
+        }
+
+        for (String extra : parsed.extras) {
+            Label chip = new Label(extra);
+            chip.getStyleClass().addAll("cart-chip", "cart-chip-sauce");
+            chipsCol.getChildren().add(chip);
+        }
+
+        mid.getChildren().addAll(name, chipsCol);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // Right: cena + qty controls (bez kosza)
+        VBox right = new VBox(10);
+        right.setAlignment(Pos.CENTER_RIGHT);
+
+// Cena: (zmienia się razem z qty)
+        HBox priceRow = new HBox(6);
+        priceRow.setAlignment(Pos.CENTER_RIGHT);
+
+        Label priceText = new Label("Cena:");
+        priceText.getStyleClass().add("cart-price-label");
+
+        Label priceValue = new Label(String.format("%.2f zł", p.getPrice() * qty));
+        priceValue.getStyleClass().add("cart-price-value");
+
+        priceRow.getChildren().addAll(priceText, priceValue);
+
+// Ilość: - 1 +
+        HBox qtyRow = new HBox(8);
+        qtyRow.setAlignment(Pos.CENTER_RIGHT);
+
+        Button minus = new Button("–");
+        minus.getStyleClass().add("cart-qty-btn");
+        minus.setOnAction(e -> {
+            // jeśli było 1 -> usunie z koszyka (removeOne już to ogarnia)
+            CartService.removeOne(p);
+            renderCart();
+            updateSummary();
+        });
+
+        Label qtyLabel = new Label(String.valueOf(qty));
+        qtyLabel.getStyleClass().add("cart-qty-pill");
+
+        Button plus = new Button("+");
+        plus.getStyleClass().add("cart-qty-btn");
+        plus.setOnAction(e -> {
+            CartService.add(p);
+            renderCart();
+            updateSummary();
+        });
+
+        qtyRow.getChildren().addAll(minus, qtyLabel, plus);
+
+        right.getChildren().addAll(priceRow, qtyRow);
+
+        card.getChildren().addAll(imgWrap, mid, spacer, right);
+        return card;
     }
 
+    private void updateSummary() {
+        if (totalAmountLabel == null) return;
+
+        double subtotal = CartService.getSubtotal();
+        totalAmountLabel.setText(String.format("%.2f zł", subtotal));
+    }
+
+    // Navigation
+
     @FXML
-    private void onBackClick() {
-        SceneUtils.changeScene("/view/userProducts.fxml");
+    private void onBack() {
+        String backTo = UserSession.getCartReturnView();
+
+        if (backTo == null || backTo.isBlank()) {
+            backTo = "/view/userProducts.fxml";
+        }
+
+        UserSession.clearCartReturnView();
+        SceneUtils.changeScene(backTo);
+    }
+
+    /**
+     * Tymczasowo podpinamy pod stary flow zamawiania (dialogi),
+     * żeby nic nie ruszać w logice. Checkout zrobimy później.
+     */
+    @FXML
+    private void onCheckoutClick() {
+        onOrderClickLegacy();
     }
 
     @FXML
     private void onClearCartClick() {
         CartService.clear();
-        loadCart();
+        renderCart();
         updateSummary();
     }
 
-    @FXML
-    private void onOrderClick() {
+    //ordering flow
 
-        String address = addressField.getText().trim();
-
-        if (address.isEmpty()) {
-            Dialogs.showInfo("Adres nie może być pusty!");
-            return;
-        }
+    private void onOrderClickLegacy() {
 
         Optional<Boolean> docChoice = Dialogs.showInvoiceChoiceDialog();
-
-        if (docChoice.isEmpty()) {
-            return;
-        }
+        if (docChoice.isEmpty()) return;
 
         User currentUser = UserSession.get();
         if (currentUser == null) {
             Dialogs.showInfo("Brak zalogowanego użytkownika. Zaloguj się ponownie.");
+            return;
+        }
+
+        // Jak nie masz checkout, to adres też był dialogowo – na razie prosimy w prostym oknie:
+        TextInputDialog addressDialog = new TextInputDialog();
+        addressDialog.setTitle("Adres dostawy");
+        addressDialog.setHeaderText(null);
+        addressDialog.setContentText("Podaj adres:");
+
+        Optional<String> addrOpt = addressDialog.showAndWait();
+        if (addrOpt.isEmpty()) return;
+
+        String address = addrOpt.get().trim();
+        if (address.isEmpty()) {
+            Dialogs.showInfo("Adres nie może być pusty!");
             return;
         }
 
@@ -143,9 +255,8 @@ public class CartController {
         }
 
         CartService.clear();
-        loadCart();
+        renderCart();
         updateSummary();
-        addressField.clear();
 
         OrderService.saveOrder(
                 currentUser.getEmail(),
@@ -157,23 +268,82 @@ public class CartController {
         );
     }
 
-    public static class CartItemRow {
+    // Helpers
 
-        private final javafx.beans.property.SimpleStringProperty name;
-        private final javafx.beans.property.SimpleIntegerProperty quantity;
-        private final javafx.beans.property.SimpleStringProperty price;
-        private final javafx.beans.property.SimpleStringProperty total;
+    private void loadImageInto(ImageView target, String path) {
+        try {
+            if (target == null) return;
 
-        public CartItemRow(String name, int quantity, double price) {
-            this.name = new javafx.beans.property.SimpleStringProperty(name);
-            this.quantity = new javafx.beans.property.SimpleIntegerProperty(quantity);
-            this.price = new javafx.beans.property.SimpleStringProperty(String.format("%.2f zł", price));
-            this.total = new javafx.beans.property.SimpleStringProperty(String.format("%.2f zł", price * quantity));
+            if (path == null || path.isBlank()) {
+                target.setImage(null);
+                return;
+            }
+
+            Image image = null;
+
+            if (path.startsWith("/")) {
+                try (InputStream is = getClass().getResourceAsStream(path)) {
+                    if (is != null) image = new Image(is);
+                }
+
+                if (image == null && path.startsWith("/images/uploads/")) {
+                    File f = Path.of("src/main/resources" + path).toFile();
+                    if (f.exists()) image = new Image(f.toURI().toString());
+                }
+            } else {
+                File f = new File(path);
+                if (f.exists()) image = new Image(f.toURI().toString());
+            }
+
+            target.setImage(image);
+        } catch (Exception ignored) {}
+    }
+
+    private static class ParsedName {
+        String baseName;
+        boolean veg;
+        String sauce;
+        List<String> extras = new ArrayList<>();
+    }
+
+    /**
+     * W koszyku trzymasz nazwę typu:
+     * "Makaron ... (Wege, Sos: Bazyliowy)"
+     * -> robimy z tego chipyy.
+     */
+    private ParsedName parseName(String full) {
+        ParsedName out = new ParsedName();
+        if (full == null) {
+            out.baseName = "";
+            return out;
         }
 
-        public javafx.beans.property.SimpleStringProperty nameProperty() { return name; }
-        public javafx.beans.property.SimpleIntegerProperty quantityProperty() { return quantity; }
-        public javafx.beans.property.SimpleStringProperty priceProperty() { return price; }
-        public javafx.beans.property.SimpleStringProperty totalProperty() { return total; }
+        String s = full.trim();
+        int i1 = s.indexOf('(');
+        int i2 = s.lastIndexOf(')');
+
+        if (i1 >= 0 && i2 > i1) {
+            out.baseName = s.substring(0, i1).trim();
+            String inside = s.substring(i1 + 1, i2).trim();
+
+            List<String> parts = Arrays.stream(inside.split(","))
+                    .map(String::trim)
+                    .filter(x -> !x.isBlank())
+                    .collect(Collectors.toList());
+
+            for (String p : parts) {
+                if (p.equalsIgnoreCase("Wege")) {
+                    out.veg = true;
+                } else if (p.toLowerCase().startsWith("sos:")) {
+                    out.sauce = p.substring(4).trim();
+                } else {
+                    out.extras.add(p);
+                }
+            }
+        } else {
+            out.baseName = s;
+        }
+
+        return out;
     }
 }

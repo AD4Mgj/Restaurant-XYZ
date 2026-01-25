@@ -44,7 +44,7 @@ public class PasswordController {
             return;
         }
 
-        SceneUtils.changeScene("/view/userDashboard.fxml");
+        SceneUtils.changeScene("/view/userProducts.fxml");
     }
 
     @FXML
