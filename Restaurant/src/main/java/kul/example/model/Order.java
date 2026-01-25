@@ -10,9 +10,11 @@ public class Order {
     private double total;
     private String timestamp;
 
+    private String products;
+
     public Order(long id, String userEmail, String address,
                  double subtotal, double delivery, double service, double total,
-                 String timestamp) {
+                 String timestamp, String products) {
         this.id = id;
         this.userEmail = userEmail;
         this.address = address;
@@ -21,6 +23,7 @@ public class Order {
         this.service = service;
         this.total = total;
         this.timestamp = timestamp;
+        this.products = products;
     }
 
     public long getId() { return id; }
@@ -31,4 +34,6 @@ public class Order {
     public double getService() { return service; }
     public double getTotal() { return total; }
     public String getTimestamp() { return timestamp; }
+
+    public String getProducts() { return products; }
 }

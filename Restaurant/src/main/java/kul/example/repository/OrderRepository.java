@@ -20,7 +20,8 @@ public class OrderRepository {
                             order.getDelivery() + ";" +
                             order.getService() + ";" +
                             order.getTotal() + ";" +
-                            order.getTimestamp()
+                            order.getTimestamp() + ";" +
+                            order.getProducts()
             );
             writer.newLine();
         } catch (IOException e) {
@@ -34,9 +35,10 @@ public class OrderRepository {
         try {
             List<String> lines = Files.readAllLines(Paths.get(FILE));
 
-            for (String line : lines) {
+            for (int i = 1; i < lines.size(); i++) {
+                String line = lines.get(i);
                 String[] parts = line.split(";");
-                if (parts.length < 8) continue;
+                if (parts.length < 9) continue;
 
                 if (parts[1].equals(email)) {
                     list.add(new Order(
@@ -47,7 +49,8 @@ public class OrderRepository {
                             Double.parseDouble(parts[4]),
                             Double.parseDouble(parts[5]),
                             Double.parseDouble(parts[6]),
-                            parts[7]
+                            parts[7],
+                            parts[8]
                     ));
                 }
             }
@@ -62,7 +65,7 @@ public class OrderRepository {
     public static long nextId() {
         try {
             List<String> lines = Files.readAllLines(Paths.get(FILE));
-            if (lines.isEmpty()) return 1;
+            if (lines.size() <= 1) return 1;
 
             String last = lines.get(lines.size() - 1);
             return Long.parseLong(last.split(";")[0]) + 1;
@@ -82,7 +85,7 @@ public class OrderRepository {
                 String line = lines.get(i);
                 String[] parts = line.split(";");
 
-                if (parts.length < 8) continue;
+                if (parts.length < 9) continue;
 
                 list.add(new Order(
                         Long.parseLong(parts[0]),
@@ -92,7 +95,8 @@ public class OrderRepository {
                         Double.parseDouble(parts[4]),
                         Double.parseDouble(parts[5]),
                         Double.parseDouble(parts[6]),
-                        parts[7]
+                        parts[7],
+                        parts[8]
                 ));
             }
 
@@ -102,6 +106,4 @@ public class OrderRepository {
 
         return list;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package kul.example.controller;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,6 +29,9 @@ public class OrderHistoryController {
     private TableColumn<Order, String> dateColumn;
 
     @FXML
+    private TableColumn<Order, String> productsColumn;
+
+    @FXML
     private void onBackClick() {
         SceneUtils.changeScene("/view/userProducts.fxml");
     }
@@ -38,7 +42,9 @@ public class OrderHistoryController {
         addressColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getAddress()));
         totalColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTotal() + " zł"));
         dateColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTimestamp()));
-
+        productsColumn.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getProducts())
+        );
         loadOrders();
     }
 

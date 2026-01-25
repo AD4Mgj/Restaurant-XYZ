@@ -2,38 +2,71 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.AdminOrdersController"
-            prefWidth="900" prefHeight="600">
+            prefWidth="1100" prefHeight="700"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
 
     <top>
-        <HBox spacing="20" alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+        <HBox styleClass="topbar">
+            <Button text="←"
+                    styleClass="hamburger-btn"
+                    onAction="#onBackClick"/>
 
-            <Button text="←" onAction="#onBackClick"/>
+            <Region HBox.hgrow="ALWAYS"/>
 
-            <Label text="Wszystkie zamówienia"
-                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label text="WSZYSTKIE ZAMÓWIENIA"
+                   styleClass="topbar-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <TableView fx:id="ordersTable" prefHeight="500">
+        <VBox spacing="20" alignment="CENTER" styleClass="admin-wrap">
 
-            <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
-                <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-                <TableColumn fx:id="addressColumn" text="Adres" prefWidth="250"/>
-                <TableColumn fx:id="totalColumn" text="Kwota" prefWidth="120"/>
-                <TableColumn fx:id="dateColumn" text="Data" prefWidth="200"/>
-            </columns>
+            <VBox spacing="10" alignment="CENTER" styleClass="admin-card">
 
-        </TableView>
+                <Label text="Panel administratora – zamówienia"
+                       styleClass="wallet-subtitle"/>
+
+                <TableView fx:id="ordersTable"
+                           prefHeight="500"
+                           styleClass="admin-table">
+
+                    <columns>
+                        <TableColumn fx:id="idColumn"
+                                     text="ID"
+                                     prefWidth="60"/>
+
+                        <TableColumn fx:id="emailColumn"
+                                     text="Email"
+                                     prefWidth="200"/>
+
+                        <TableColumn fx:id="addressColumn"
+                                     text="Adres"
+                                     prefWidth="250"/>
+
+                        <TableColumn fx:id="totalColumn"
+                                     text="Kwota"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="dateColumn"
+                                     text="Data"
+                                     prefWidth="200"/>
+
+                        <TableColumn fx:id="productsColumn"
+                                     text="Produkty"
+                                     prefWidth="350"/>
+                    </columns>
+
+                </TableView>
+            </VBox>
+
+        </VBox>
     </center>
 
 </BorderPane>

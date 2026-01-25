@@ -2,53 +2,66 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kul.example.controller.OrderHistoryController"
-            prefWidth="800" prefHeight="600">
+            prefWidth="1100" prefHeight="700"
+            styleClass="root-bg"
+            stylesheets="@/styles/app.css">
 
     <top>
-        <HBox spacing="20" alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+        <HBox styleClass="topbar">
+            <Button text="←"
+                    styleClass="hamburger-btn"
+                    onAction="#onBackClick"/>
 
-            <Button text="←" onAction="#onBackClick"/>
+            <Region HBox.hgrow="ALWAYS"/>
 
-            <Label text="Historia zamówień"
-                   style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Label text="HISTORIA ZAMÓWIEŃ"
+                   styleClass="topbar-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="10">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+        <VBox spacing="20" alignment="CENTER" styleClass="history-wrap">
 
-            <TableView fx:id="orderTable" prefHeight="500">
+            <VBox spacing="10" alignment="CENTER" styleClass="history-card">
 
-                <columns>
-                    <TableColumn fx:id="idColumn"
-                                 text="ID"
-                                 prefWidth="60"/>
+                <Label text="Twoje zamówienia"
+                       styleClass="wallet-subtitle"/>
 
-                    <TableColumn fx:id="addressColumn"
-                                 text="Adres dostawy"
-                                 prefWidth="250"/>
+                <TableView fx:id="orderTable"
+                           prefHeight="500"
+                           styleClass="history-table">
 
-                    <TableColumn fx:id="totalColumn"
-                                 text="Kwota"
-                                 prefWidth="120"/>
+                    <columns>
+                        <TableColumn fx:id="idColumn"
+                                     text="ID"
+                                     prefWidth="60"/>
 
-                    <TableColumn fx:id="dateColumn"
-                                 text="Data"
-                                 prefWidth="200"/>
-                </columns>
+                        <TableColumn fx:id="addressColumn"
+                                     text="Adres dostawy"
+                                     prefWidth="250"/>
 
-            </TableView>
+                        <TableColumn fx:id="totalColumn"
+                                     text="Kwota"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="dateColumn"
+                                     text="Data"
+                                     prefWidth="200"/>
+
+                        <TableColumn fx:id="productsColumn"
+                                     text="Produkty"
+                                     prefWidth="350"/>
+                    </columns>
+
+                </TableView>
+            </VBox>
+
         </VBox>
     </center>
 

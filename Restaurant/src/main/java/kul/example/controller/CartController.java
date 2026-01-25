@@ -213,7 +213,6 @@ public class CartController {
             return;
         }
 
-        // Jak nie masz checkout, to adres też był dialogowo – na razie prosimy w prostym oknie:
         TextInputDialog addressDialog = new TextInputDialog();
         addressDialog.setTitle("Adres dostawy");
         addressDialog.setHeaderText(null);
@@ -254,10 +253,6 @@ public class CartController {
             Dialogs.showInfo("Wygenerowano paragon.");
         }
 
-        CartService.clear();
-        renderCart();
-        updateSummary();
-
         OrderService.saveOrder(
                 currentUser.getEmail(),
                 address,
@@ -266,6 +261,10 @@ public class CartController {
                 service,
                 total
         );
+
+        CartService.clear();
+        renderCart();
+        updateSummary();
     }
 
     // Helpers

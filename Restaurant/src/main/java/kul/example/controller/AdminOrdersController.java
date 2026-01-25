@@ -1,5 +1,7 @@
 package kul.example.controller;
 
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,15 +32,22 @@ public class AdminOrdersController {
     private TableColumn<Order, String> dateColumn;
 
     @FXML
+    private TableColumn<Order, String> productsColumn;
+
+    @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(data.getValue().getId()).asObject());
-        emailColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getUserEmail()));
-        addressColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getAddress()));
-        totalColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTotal() + " zł"));
-        dateColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getTimestamp()));
+        idColumn.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getId()).asObject());
+        emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUserEmail()));
+        addressColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
+        totalColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTotal() + " zł"));
+        dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTimestamp()));
+        productsColumn.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getProducts())
+        );
 
         loadOrders();
     }
+
 
     private void loadOrders() {
         ObservableList<Order> list = FXCollections.observableArrayList(
@@ -51,4 +60,5 @@ public class AdminOrdersController {
     private void onBackClick() {
         SceneUtils.changeScene("/view/adminDashboard.fxml");
     }
+
 }
