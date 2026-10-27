@@ -305,11 +305,6 @@ public class CartController {
         List<String> extras = new ArrayList<>();
     }
 
-    /**
-     * W koszyku trzymasz nazwę typu:
-     * "Makaron ... (Wege, Sos: Bazyliowy)"
-     * -> robimy z tego chipyy.
-     */
     private ParsedName parseName(String full) {
         ParsedName out = new ParsedName();
         if (full == null) {
